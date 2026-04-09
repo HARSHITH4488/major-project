@@ -1,0 +1,67 @@
+<div class="page-container">
+
+  <div class="page-header">
+    <h2>System Users</h2>
+    <p>Manage user accounts and permissions</p>
+  </div>
+
+  <div class="card">
+
+    <table class="data-table">
+
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Email</th>
+          <th>Role</th>
+          <th>Status</th>
+          <th>Action</th>
+        </tr>
+      </thead>
+
+      <tbody>
+
+        <tr *ngFor="let user of users">
+
+          <td>{{user.name}}</td>
+          <td>{{user.email}}</td>
+
+          <td>
+            <span class="role-badge">
+              {{user.role}}
+            </span>
+          </td>
+
+          <td>
+            <span class="status" [ngClass]="user.status.toLowerCase()">
+              {{user.status}}
+            </span>
+          </td>
+
+          <td class="actions">
+
+            <button
+  *ngIf="user.role !== 'ADMIN'"
+  (click)="user.status === 'ACTIVE' ? suspend(user.id) : activate(user.id)"
+  class="btn"
+  [ngClass]="user.status === 'ACTIVE' ? 'suspend' : 'activate'">
+
+  {{ user.status === 'ACTIVE' ? 'Suspend' : 'Activate' }}
+
+</button>
+
+
+
+           
+
+          </td>
+
+        </tr>
+
+      </tbody>
+
+    </table>
+
+  </div>
+
+</div>

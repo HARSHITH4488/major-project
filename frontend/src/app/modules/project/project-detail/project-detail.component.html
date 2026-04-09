@@ -1,0 +1,620 @@
+<div *ngIf="project" class="project-container page-container">
+  <!-- ================= HEADER ================= -->
+
+  <div class="header">
+
+<div>
+  <h2>{{ project.projectName }}</h2>
+  <p class="client">Client: {{ project.clientName }}</p>
+</div>
+
+<span
+  class="status-badge"
+  [ngClass]="{
+    'planning': project.status === 'PLANNING',
+    'active': project.status === 'ACTIVE'
+  }"
+>
+  {{ project.status }}
+</span>
+
+  </div>
+
+  <!-- ================= SUMMARY ================= -->
+
+  <div class="summary-cards" *ngIf="!isEmployee">
+
+<div class="card">
+  <p>Total Amount</p>
+  <h3>₹ {{ project.totalAmount | number:'1.2-2' }}</h3>
+</div>
+
+<div class="card">
+  <p>Total Paid</p>
+  <h3 class="paid">₹ {{ project.totalPaidAmount | number:'1.2-2' }}</h3>
+</div>
+
+<div class="card">
+  <p>Balance</p>
+  <h3 class="balance">₹ {{ project.balanceAmount | number:'1.2-2' }}</h3>
+</div>
+
+  </div>
+
+  <!-- ================= TAB NAVIGATION ================= -->
+
+  <div class="tabs">
+
+<button [class.active]="activeTab==='overview'" (click)="activeTab='overview'">
+  Overview
+</button>
+
+<button 
+  *ngIf="!isEmployee"
+  [class.active]="activeTab==='payments'" 
+  (click)="activeTab='payments'">
+  Payments
+</button>
+
+<button [class.active]="activeTab==='contractors'" (click)="activeTab='contractors'">
+  Contractors
+</button>
+
+<button [class.active]="activeTab==='schedule'" (click)="activeTab='schedule'">
+  Schedule
+</button>
+
+<button [class.active]="activeTab==='updates'" (click)="activeTab='updates'">
+  Updates
+</button>
+
+<button [class.active]="activeTab==='documents'" (click)="activeTab='documents'">
+  Documents
+</button>
+
+  </div>
+
+  <!-- ================= OVERVIEW ================= -->
+
+  <div *ngIf="activeTab==='overview'" class="overview-grid">
+
+<div class="overview-card" *ngIf="!isEmployee">
+  <h4>💰 Payments</h4>
+  <p class="big-number">{{payments.length}}</p>
+  <span class="sub">transactions recorded</span>
+</div>
+
+<div class="overview-card">
+  <h4>👷 Contractors</h4>
+  <p class="big-number">{{assignedContractors.length}}</p>
+  <span class="sub">contractors assigned</span>
+</div>
+
+<div class="overview-card">
+  <h4>📅 Schedules</h4>
+  <p class="big-number">{{schedules.length}}</p>
+  <span class="sub">tasks scheduled</span>
+</div>
+
+<div class="overview-card">
+  <h4>📝 Updates</h4>
+  <p class="big-number">{{updates.length}}</p>
+  <span class="sub">site updates posted</span>
+</div>
+
+
+  </div>
+
+  <!-- ================= PAYMENTS ================= -->
+
+  <div *ngIf="activeTab==='payments' && !isEmployee">
+
+<div class="action-buttons">
+
+  <button class="btn-primary" (click)="showPaymentForm = true">
+    + Add Payment
+  </button>
+
+  <button class="btn-secondary" (click)="togglePaymentHistory()">
+    Payment History
+  </button>
+
+</div>
+
+<div *ngIf="showPaymentForm" class="form-card">
+
+  <h3>Add Payment</h3>
+
+  <div class="form-row">
+    <div>
+      <label>Amount</label>
+      <input type="number" [(ngModel)]="paymentData.amount" />
+    </div>
+
+    <div>
+      <label>Date</label>
+      <input type="date" [(ngModel)]="paymentData.paymentDate" />
+    </div>
+  </div>
+
+  <div class="form-row">
+    <div>
+      <label>Payment Type</label>
+      <select [(ngModel)]="paymentData.paymentType">
+        <option value="ADVANCE">Advance</option>
+        <option value="FINAL">Final</option>
+      </select>
+    </div>
+
+    <div>
+      <label>Payment Mode</label>
+      <select [(ngModel)]="paymentData.paymentMode">
+        <option value="BANK">Bank</option>
+        <option value="UPI">UPI</option>
+        <option value="CASH">Cash</option>
+      </select>
+    </div>
+  </div>
+
+  <div class="form-row full">
+    <label>Notes</label>
+    <textarea rows="3" [(ngModel)]="paymentData.notes"></textarea>
+  </div>
+
+  <div class="form-actions">
+    <button class="btn-cancel" (click)="showPaymentForm=false">
+      Cancel
+    </button>
+
+    <button class="btn-primary" (click)="addPayment()">
+      Save Payment
+    </button>
+  </div>
+
+</div>
+
+<div *ngIf="showPaymentHistory" class="history-card">
+
+  <h3>Payment History</h3>
+
+  <table *ngIf="payments.length>0">
+
+    <thead>
+      <tr>
+        <th>Date</th>
+        <th>Amount</th>
+        <th>Mode</th>
+        <th>Type</th>
+        <th>Action</th>
+      </tr>
+    </thead>
+
+    <tbody>
+
+      <tr *ngFor="let payment of payments">
+
+        <td>{{ payment.paymentDate | date }}</td>
+
+        <td class="amount">
+          ₹ {{ payment.amount | number:'1.2-2' }}
+        </td>
+
+        <td>{{ payment.paymentMode }}</td>
+
+        <td>{{ payment.paymentType }}</td>
+
+        <td>
+          <button
+            class="btn-delete"
+            (click)="onDeletePayment(payment.id)">
+            Delete
+          </button>
+        </td>
+
+      </tr>
+
+    </tbody>
+
+  </table>
+
+</div>
+
+  </div>
+
+  <!-- ================= CONTRACTORS ================= -->
+
+  <div *ngIf="activeTab === 'contractors'">
+
+<div class="contractor-card">
+
+  <h3>Assign Contractor</h3>
+
+  <div class="assign-row">
+
+    <select [(ngModel)]="selectedContractorId" class="contractor-select">
+      <option value="">Select Contractor</option>
+
+      <option *ngFor="let c of contractors" [value]="c.id">
+        {{ c.name }} — {{ c.natureOfWork }}
+      </option>
+    </select>
+
+    <input
+      type="number"
+      placeholder="Contract Amount"
+      [(ngModel)]="contractAmount"
+      class="amount-input"
+    />
+
+    <button class="btn-primary" (click)="assignContractor()">
+      Assign
+    </button>
+
+  </div>
+
+</div>
+
+
+<div class="contractor-table-card">
+
+  <h3>Assigned Contractors</h3>
+
+  <table>
+
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Work</th>
+        <th>Phone</th>
+        <th>Action</th>
+      </tr>
+    </thead>
+
+    <tbody>
+
+      <tr *ngFor="let contractor of assignedContractors">
+
+        <td>{{ contractor.name }}</td>
+        <td>{{ contractor.natureOfWork }}</td>
+        <td>{{ contractor.phone }}</td>
+
+        <td>
+          <button
+            class="btn-delete"
+            (click)="removeContractor(contractor.id)">
+            Remove
+          </button>
+        </td>
+
+      </tr>
+
+    </tbody>
+
+  </table>
+
+</div>
+
+</div>
+  <!-- ================= SCHEDULE ================= -->
+
+  <div *ngIf="activeTab==='schedule'" class="module-card">
+
+<div class="section-header">
+  <h3>Project Scheduling</h3>
+</div>
+
+<p style="color:#64748b;margin-bottom:20px">
+  Manage project schedules, timeline, and task planning.
+</p>
+
+<div class="schedule-actions">
+
+  <button
+    class="btn-primary"
+    (click)="openSchedulePage()">
+    + Schedule Work
+  </button>
+
+  <button
+    class="btn-secondary"
+    (click)="openTimelinePage()">
+    View Timeline
+  </button>
+
+  
+
+</div>
+
+  </div>
+
+
+ <!-- ================= UPDATES ================= -->
+
+<div *ngIf="activeTab === 'updates'">
+
+  <h3>Project Updates</h3>
+
+  <div *ngIf="updates.length === 0">
+    No updates yet
+  </div>
+
+  <!-- ✅ IMPORTANT: loop INSIDE ngIf -->
+  <div *ngFor="let u of updates" class="update-card">
+
+    <!-- Header -->
+    <div class="update-header">
+      <div>
+        <p class="contractor-name">
+          👷 {{ u.contractor?.name || 'Unknown' }}
+        </p>
+        <p class="update-date">
+          {{ u.createdAt | date:'medium' }}
+        </p>
+      </div>
+
+      <button
+        class="delete-btn"
+        (click)="confirmDeleteUpdate(u.id)">
+        🗑️ Delete
+      </button>
+    </div>
+
+    <!-- Message -->
+    <p class="update-message">
+      {{ u.message }}
+    </p>
+
+    <!-- Image -->
+    <div class="update-image-container" *ngIf="u.photo">
+      <img
+        [src]="'http://localhost:3000/uploads/project-updates/' + u.photo"
+        class="update-img"
+        (click)="previewImage(u.photo)"
+      />
+    </div>
+
+  </div>
+
+</div>
+ <!-- ================= DOCUMENTS ================= -->
+
+<!-- ================= DOCUMENTS ================= -->
+
+<div *ngIf="activeTab==='documents'">
+
+  <div class="document-section">
+
+    <div class="document-header">
+
+      <h3>Project Documents</h3>
+
+      <!-- ✅ NEW BUTTON -->
+      <button
+        class="btn-contractor-view"
+        [routerLink]="['/projects', project.id, 'contractor-documents']"
+      >
+        👷 View Contractor Documents
+      </button>
+
+    </div>
+
+    <!-- Upload Section -->
+
+    <div class="document-upload-card">
+
+      <div class="upload-left">
+
+        <label class="upload-btn">
+          📎 Select File
+          <input
+            type="file"
+            (change)="onFileSelected($event)"
+            hidden
+          />
+        </label>
+
+        <span class="file-name" *ngIf="selectedFile">
+          {{ selectedFile.name }}
+        </span>
+
+        <span class="file-placeholder" *ngIf="!selectedFile">
+          No file selected
+        </span>
+
+      </div>
+
+      <div class="upload-right">
+
+        <input
+          type="text"
+          [(ngModel)]="selectedCategory"
+          placeholder="Enter category (e.g. Electrical Drawing)"
+          class="category-input"
+        />
+
+        <button
+          class="btn-primary upload-btn-main"
+          (click)="uploadDocument()">
+          Upload
+        </button>
+
+      </div>
+
+    </div>
+
+    <!-- Search -->
+    <div class="document-toolbar">
+
+      <input
+        type="text"
+        placeholder="Search documents..."
+        [(ngModel)]="searchText"
+        class="search-input"
+      />
+
+    </div>
+
+    <!-- ✅ FILTERED TABLE (ADMIN ONLY) -->
+
+    <table *ngIf="filteredDocuments.length > 0" class="document-table">
+
+      <thead>
+        <tr>
+          <th>File</th>
+          <th>Category</th>
+          <th>Size</th>
+          <th>Date</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+
+      <tbody>
+
+        <tr
+          *ngFor="let doc of filteredDocuments"
+          (click)="selectDocument(doc)"
+          class="document-row"
+        >
+
+          <!-- 🚨 IMPORTANT: HIDE CONTRACTOR DOCS -->
+          <ng-container *ngIf="doc.uploadedByRole !== 'CONTRACTOR'">
+
+            <td class="file-cell">
+              <span class="file-icon">{{ getFileIcon(doc.fileType) }}</span>
+              <span class="file-name">{{ doc.fileName }}</span>
+
+              <span *ngIf="doc.visibleToContractor" class="shared-badge">
+  ✔ Shared (Multiple)
+</span>
+            </td>
+
+            <td>
+              <span class="category-tag">{{ doc.category }}</span>
+            </td>
+
+            <td>{{ (doc.fileSize / 1024).toFixed(1) }} KB</td>
+
+            <td>{{ doc.uploadedAt | date:'mediumDate' }}</td>
+
+            <td>
+  <div class="action-bar" (click)="$event.stopPropagation()">
+
+    <!-- 🔘 SHARE -->
+    <div class="share-wrapper">
+
+      <button
+        class="btn-icon"
+        (click)="toggleShareDropdown(doc.id)"
+        title="Share"
+      >
+        👥
+      </button>
+
+      <!-- POPUP -->
+      <div
+        class="share-popover"
+        *ngIf="openShareDropdownId === doc.id"
+      >
+
+        <div class="popover-header">
+          Share with contractors
+        </div>
+
+        <div class="popover-list">
+
+          <label *ngFor="let c of assignedContractors" class="popover-item">
+
+            <input
+              type="checkbox"
+              [checked]="selectedShareContractorIds.includes(c.id)"
+              (change)="onContractorToggle(c.id, $event)"
+            />
+
+            <span>👷 {{ c.name }}</span>
+
+          </label>
+
+        </div>
+
+        <button
+          class="btn-primary share-confirm"
+          (click)="shareDocument(doc)"
+        >
+          Share Now
+        </button>
+
+      </div>
+
+    </div>
+
+    <!-- 👁 VIEW -->
+    <button
+      class="btn-view"
+      (click)="previewDocument(doc)"
+    >
+      View
+    </button>
+
+    <!-- ⬇ DOWNLOAD -->
+    <button
+      class="btn-download"
+      (click)="downloadDocument(doc)"
+    >
+      Download
+    </button>
+
+    <!-- ❌ DELETE -->
+    <button
+      class="btn-delete"
+      (click)="deleteDocument(doc)"
+    >
+      Delete
+    </button>
+
+  </div>
+</td>
+          </ng-container>
+
+        </tr>
+
+      </tbody>
+
+    </table>
+
+    <!-- EMPTY -->
+    <div *ngIf="filteredDocuments.length === 0" class="empty-docs">
+      No admin documents uploaded yet.
+    </div>
+
+    <!-- PREVIEW PANEL (UNCHANGED) -->
+
+    <div class="preview-panel" *ngIf="selectedDocument">
+
+      <h3>Document Preview</h3>
+
+      <img
+        *ngIf="selectedDocument.fileType === 'IMAGE'"
+        [src]="documentService.downloadDocument(selectedDocument.id)"
+        class="preview-image"
+      />
+
+      <iframe
+        *ngIf="selectedDocument.fileType === 'PDF'"
+        [src]="documentService.downloadDocument(selectedDocument.id)"
+        class="preview-pdf">
+      </iframe>
+
+      <div class="file-info">
+
+        <p><strong>File Name:</strong> {{ selectedDocument.fileName }}</p>
+        <p><strong>Category:</strong> {{ selectedDocument.category }}</p>
+        <p><strong>Uploaded:</strong> {{ selectedDocument.uploadedAt | date:'medium' }}</p>
+        <p><strong>Size:</strong> {{ (selectedDocument.fileSize / 1024).toFixed(1) }} KB</p>
+
+      </div>
+
+    </div>
+
+  </div>
+
+</div>

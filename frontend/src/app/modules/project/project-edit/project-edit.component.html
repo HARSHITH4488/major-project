@@ -1,0 +1,83 @@
+<div class="edit-wrapper">
+
+  <div class="edit-card">
+
+    <div class="edit-header">
+      <h2>Edit Project</h2>
+      <button class="btn-back" (click)="cancel()">← Back</button>
+    </div>
+
+    <div *ngIf="loading" class="loading">
+      Loading project details...
+    </div>
+
+    <form *ngIf="!loading" [formGroup]="projectForm" class="form-grid">
+
+      <div class="form-group">
+        <label>Project Name</label>
+        <input type="text" formControlName="projectName">
+      </div>
+
+      <div class="form-group">
+        <label>Project Type</label>
+        <input type="text" formControlName="projectType">
+      </div>
+
+      <div class="form-group">
+        <label>Client Name</label>
+        <input type="text" formControlName="clientName">
+      </div>
+
+      <div class="form-group">
+        <label>Start Date</label>
+        <input type="date" formControlName="startDate">
+      </div>
+
+      <div class="form-group">
+        <label>End Date</label>
+        <input type="date" formControlName="endDate">
+      </div>
+
+      <div class="form-group">
+        <label>Budget (₹)</label>
+        <input type="number" formControlName="totalAmount">
+      </div>
+
+      <div class="form-group">
+        <label>Status</label>
+        <select formControlName="status">
+          <option value="PLANNING">PLANNING</option>
+          <option value="ACTIVE">ACTIVE</option>
+          <option value="COMPLETED">COMPLETED</option>
+        </select>
+      </div>
+
+      <div class="form-group full-width">
+        <label>Description</label>
+        <textarea rows="4" formControlName="description"></textarea>
+      </div>
+
+      <div class="form-actions full-width">
+        <button
+          type="button"
+          class="btn-update"
+          (click)="updateProject()"
+          [disabled]="updating">
+
+          {{ updating ? 'Updating...' : 'Update Project' }}
+        </button>
+      </div>
+
+      <div *ngIf="errorMessage" class="error full-width">
+        {{ errorMessage }}
+      </div>
+
+    </form>
+
+  </div>
+
+</div>
+<app-toast
+  *ngIf="showToast"
+  [message]="toastMessage">
+</app-toast>

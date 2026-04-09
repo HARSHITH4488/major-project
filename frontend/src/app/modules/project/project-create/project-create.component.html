@@ -1,0 +1,119 @@
+<div class="form-container">
+  <h2>Create New Project</h2>
+
+  <form [formGroup]="projectForm" (ngSubmit)="onSubmit()">
+
+    <app-toast
+      *ngIf="showToast"
+      [message]="toastMessage"
+      type="success">
+    </app-toast>
+
+    <!-- Project Name -->
+    <div class="form-group">
+      <label>Project Name</label>
+      <input type="text" formControlName="projectName" />
+      <div class="error" *ngIf="submitted && f.projectName?.errors">
+        <small *ngIf="f.projectName?.errors?.['required']">
+          Project name is required
+        </small>
+        <small *ngIf="f.projectName?.errors?.['minlength']">
+          Minimum 3 characters required
+        </small>
+      </div>
+    </div>
+
+    <!-- Project Type -->
+    <div class="form-group">
+      <label>Project Type</label>
+      <select formControlName="projectType">
+        <option value="">Select Type</option>
+        <option value="RESIDENTIAL">Residential</option>
+        <option value="COMMERCIAL">Commercial</option>
+        <option value="INFRASTRUCTURE">Infrastructure</option>
+      </select>
+      <div class="error" *ngIf="submitted && f.projectType?.errors">
+        <small>Project type is required</small>
+      </div>
+    </div>
+
+    <!-- Client Name -->
+    <div class="form-group">
+      <label>Client Name</label>
+      <input type="text" formControlName="clientName" />
+      <div class="error" *ngIf="submitted && f.clientName?.errors">
+        <small>Client name is required</small>
+      </div>
+    </div>
+
+    <!-- Dates -->
+    <div class="form-row">
+      <div class="form-group">
+        <label>Start Date</label>
+        <input type="date" formControlName="startDate" />
+        <div class="error" *ngIf="submitted && f.startDate?.errors">
+          <small>Start date is required</small>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label>End Date</label>
+        <input type="date" formControlName="endDate" />
+      </div>
+    </div>
+
+    <!-- Date Range Error -->
+    <div
+      class="error"
+      *ngIf="submitted && projectForm.errors?.['invalidDateRange']">
+      <small>End date must be after start date</small>
+    </div>
+
+    <!-- Total Amount -->
+    <div class="form-group">
+      <label>Total Amount (₹)</label>
+      <input type="number" formControlName="totalAmount" />
+      <div class="error" *ngIf="submitted && f.totalAmount?.errors">
+        <small *ngIf="f.totalAmount?.errors?.['required']">
+          Total amount is required
+        </small>
+        <small *ngIf="f.totalAmount?.errors?.['min']">
+          Amount must be greater than 0
+        </small>
+      </div>
+    </div>
+
+    <!-- Status -->
+    <div class="form-group">
+      <label>Status</label>
+      <select formControlName="status">
+        <option value="ACTIVE">Active</option>
+        <option value="COMPLETED">Completed</option>
+        <option value="CANCELLED">Cancelled</option>
+      </select>
+    </div>
+
+    <!-- Description -->
+    <div class="form-group">
+      <label>Description</label>
+      <textarea rows="4" formControlName="description"></textarea>
+    </div>
+
+    <!-- Server Error -->
+    <div class="error" *ngIf="serverError">
+      {{ serverError }}
+    </div>
+
+    <!-- Buttons -->
+    <div class="button-group">
+      <button type="submit" [disabled]="loading">
+        {{ loading ? 'Creating...' : 'Create Project' }}
+      </button>
+
+      <button type="button" routerLink="/projects">
+        Cancel
+      </button>
+    </div>
+
+  </form>
+</div>
