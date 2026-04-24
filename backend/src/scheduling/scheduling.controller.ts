@@ -191,4 +191,21 @@ assignContractorToSchedule(
     body.endDate
   );
 }
+@Get('today-reminders')
+getTodayReminders() {
+  return this.schedulingService.getTodayReminders();
+}
+
+// ✅ DELAYED TASKS (FOR DASHBOARD)
+@Get('delayed')
+getDelayedSchedules() {
+  return this.schedulingService.getDelayedSchedules();
+}
+
+// ✅ CONTRACTOR RANKING
+@Get('delay-ranking')
+getDelayRanking() {
+  return this.schedulingService.getScheduleDelayRanking();
+}
+
 }

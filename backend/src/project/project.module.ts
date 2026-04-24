@@ -6,6 +6,7 @@ import { ProjectController } from './project.controller';
 import { AuditLog } from '../audit/audit-log.entity';
 import { Contractor } from '../contractor/contractor.entity';
 import { ProjectContractor } from '../project-contractor/project-contractor.entity';
+import { Schedule } from '../scheduling/scheduling.entity';
 
 @Module({
   imports: [
@@ -13,7 +14,8 @@ import { ProjectContractor } from '../project-contractor/project-contractor.enti
       Project,
       AuditLog,
       Contractor,
-      ProjectContractor   // 🔥 THIS MUST BE HERE
+      ProjectContractor ,
+       Schedule // 🔥 THIS MUST BE HERE
     ]),
   ],
   providers: [ProjectService],

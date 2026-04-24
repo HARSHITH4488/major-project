@@ -9,7 +9,7 @@ import {
 
 import { Contractor } from '../contractor/contractor.entity';
 import { ScheduleAssignment } from './schedule-assignment.entity';
-
+import { Schedule } from '../scheduling/scheduling.entity';
 @Entity()
 export class ScheduleTask {
 
@@ -48,4 +48,6 @@ export class ScheduleTask {
 
   @UpdateDateColumn()
   updatedAt: Date;
+  @ManyToOne(() => Schedule, (schedule) => schedule.tasks)
+schedule: Schedule;
 }

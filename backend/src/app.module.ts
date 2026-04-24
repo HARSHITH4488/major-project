@@ -25,16 +25,19 @@ import { TaskModule } from './task/task.module';
       isGlobal: true,
     }),
 
-    TypeOrmModule.forRoot({
-      type: 'postgres',
-      host: 'localhost',
-      port: 5432,
-      username: 'postgres',
-      password: 'harshith@4488',
-      database: 'site_manager_db',
-      autoLoadEntities: true,
-      synchronize: true,
-    }),
+   TypeOrmModule.forRoot({
+  type: 'postgres',
+  host: process.env.DB_HOST,
+  port: +process.env.DB_PORT,
+  username: process.env.DB_USER,
+  password: process.env.DB_PASSWORD,
+  database: process.env.DB_NAME,
+  autoLoadEntities: true,
+  synchronize: false,
+  ssl: {
+    rejectUnauthorized: false,
+  },
+}),
 
     ProjectModule,
     ContractorModule,
@@ -53,6 +56,3 @@ import { TaskModule } from './task/task.module';
   ],
 })
 export class AppModule {}
-
-
-

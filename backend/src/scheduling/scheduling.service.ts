@@ -39,6 +39,19 @@ export class SchedulingService {
 private readonly assignmentRepo: Repository<ScheduleAssignment>,
 
   ) {}
+  async getTodayReminders() {
+  const today = new Date().toISOString().split('T')[0];
+
+  const reminders = await this.scheduleRepo.find({
+    where: {
+      reminderDate: today,
+      deletedAt: null,
+    },
+    relations: ['project'],
+  });
+
+  return reminders;
+}
 
   /* =========================================================
      CREATE SCHEDULE
@@ -556,4 +569,56 @@ async assignContract(
     relations: ['schedule', 'contractor']
   });
 }
+// ✅ DELAYED SCHEDULE TASKS
+async getDelayedSchedules() {
+  return this.taskRepo
+    .createQueryBuilder('task')
+
+    // ✅ contractor
+    .leftJoinAndSelect('task.contractor', 'contractor')
+
+    // 🔥 ADD THIS
+    .leftJoinAndSelect('task.assignment', 'assignment')
+
+    // 🔥 ADD THIS
+    .leftJoinAndSelect('assignment.schedule', 'schedule')
+
+    // 🔥 MOST IMPORTANT
+    .leftJoinAndSelect('schedule.project', 'project')
+
+    .where('task.endDate < CURRENT_DATE')
+    .andWhere("task.status != 'COMPLETED'")
+    .orderBy('task.endDate', 'ASC')
+    .getMany();
+}
+
+// ✅ CONTRACTOR DELAY RANKING
+async getScheduleDelayRanking() {
+  const tasks = await this.taskRepo
+    .createQueryBuilder('task')
+    .leftJoinAndSelect('task.contractor', 'contractor')
+    .where('task.endDate < CURRENT_DATE')
+    .andWhere("task.status != 'COMPLETED'")
+    .getMany();
+
+  const rankingMap: Record<string, number> = {};
+
+  tasks.forEach(task => {
+    const name = task.contractor?.name || 'Unknown';
+
+    if (!rankingMap[name]) {
+      rankingMap[name] = 0;
+    }
+
+    rankingMap[name]++;
+  });
+
+  return Object.keys(rankingMap)
+    .map(name => ({
+      contractor: name,
+      delayedTasks: rankingMap[name]
+    }))
+    .sort((a, b) => b.delayedTasks - a.delayedTasks);
+}
+
 }

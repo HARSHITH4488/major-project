@@ -53,4 +53,14 @@ getAllTasks() {
 deleteTask(@Param('id') id: number) {
   return this.taskService.deleteTask(Number(id));
 }
+
+@Get('delayed')
+getDelayedTasks() {
+  return this.taskService.getDelayedTasks();
+}
+// ✅ DELAY RANKING
+@Get('delay-ranking')
+getDelayRanking() {
+  return this.taskService.getContractorDelayRanking();
+}
 }

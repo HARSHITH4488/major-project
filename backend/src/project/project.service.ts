@@ -11,6 +11,7 @@ import { AuditLog } from '../audit/audit-log.entity';
 import { CreateProjectDto } from './dto/create-project.dto';
 import { Contractor } from '../contractor/contractor.entity';
 import { ProjectContractor } from '../project-contractor/project-contractor.entity';
+import { Schedule } from '../scheduling/scheduling.entity';
 
 @Injectable()
 export class ProjectService {
@@ -26,7 +27,23 @@ export class ProjectService {
 
     @InjectRepository(ProjectContractor)
     private readonly projectContractorRepository: Repository<ProjectContractor>,
+    @InjectRepository(Schedule)
+private readonly scheduleRepository: Repository<Schedule>,
   ) {}
+ async getProjectProgress(projectId: number): Promise<number> {
+  const schedules = await this.scheduleRepository.find({
+    where: { project: { id: projectId } },
+  });
+
+  if (!schedules.length) return 0;
+
+  const total = schedules.reduce(
+    (sum, s) => sum + (s.progress || 0),
+    0
+  );
+
+  return Math.round(total / schedules.length);
+}
 
   /* =====================================================
      CREATE PROJECT
@@ -75,13 +92,24 @@ export class ProjectService {
 
     const [data, total] = await queryBuilder.getManyAndCount();
 
+    const updatedData = await Promise.all(
+  data.map(async (project) => {
+    const progress = await this.getProjectProgress(project.id);
+
     return {
-      data,
-      total,
-      page,
-      limit,
-      totalPages: Math.ceil(total / limit),
+      ...project,
+      progress,
     };
+  }),
+);
+
+return {
+  data: updatedData,
+  total,
+  page,
+  limit,
+  totalPages: Math.ceil(total / limit),
+};
   }
 
   /* =====================================================

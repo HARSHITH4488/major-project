@@ -11,6 +11,9 @@ import {
 import { Project } from '../project/project.entity';
 import { OneToMany } from 'typeorm';
 import { ScheduleAssignment } from './schedule-assignment.entity';
+import { ScheduleTask } from './schedule-task.entity';
+
+
 @Entity()
 export class Schedule {
 
@@ -46,4 +49,9 @@ export class Schedule {
   deletedAt: Date;
   @OneToMany(() => ScheduleAssignment, (assignment) => assignment.schedule)
 assignments: ScheduleAssignment[];
+@OneToMany(() => ScheduleTask, (task) => task.schedule)
+tasks: ScheduleTask[];
+progress: number;
+
 }
+

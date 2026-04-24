@@ -83,24 +83,16 @@ async createTask(data: {
     .where(':today BETWEEN task.startDate AND task.endDate', { today })
     .getMany();
 
-  const summary: any = {};
+  const total = tasks.length;
 
-  tasks.forEach((task) => {
-    if (!summary[task.assignedTo]) {
-      summary[task.assignedTo] = {
-        total: 0,
-        completed: 0,
-      };
-    }
+  const completed = tasks.filter(
+    (task) => task.isCompleted
+  ).length;
 
-    summary[task.assignedTo].total++;
-
-    if (task.isCompleted) {
-      summary[task.assignedTo].completed++;
-    }
-  });
-
-  return summary;
+  return {
+    total,
+    completed,
+  };
 }
   // ✅ GET ALL TASKS
 async getAllTasks() {
@@ -112,5 +104,50 @@ async getAllTasks() {
 // ✅ DELETE TASK
 async deleteTask(id: number) {
   return this.taskRepository.delete(id);
+}
+
+async getDelayedTasks() {
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
+
+  return this.taskRepository
+    .createQueryBuilder('task')
+    .leftJoinAndSelect('task.user', 'user')
+    .where('task.endDate < :today', { 
+      today: today.toISOString().split('T')[0] // ✅ IMPORTANT
+    })
+    .andWhere('task.isCompleted = false')
+    .orderBy('task.endDate', 'ASC')
+    .getMany();
+}
+// ✅ CONTRACTOR DELAY RANKING
+async getContractorDelayRanking() {
+
+  const tasks = await this.taskRepository
+    .createQueryBuilder('task')
+    .leftJoinAndSelect('task.user', 'user')
+    .where('task.endDate < CURRENT_DATE') // ✅ DB handles date
+    .andWhere('task.isCompleted = false')
+    .getMany();
+
+  const rankingMap: Record<string, number> = {};
+
+  tasks.forEach(task => {
+    const name = task.user?.name || 'Unknown';
+
+    if (!rankingMap[name]) {
+      rankingMap[name] = 0;
+    }
+
+    rankingMap[name]++;
+  });
+
+  const result = Object.keys(rankingMap).map(name => ({
+    contractor: name,
+    delayedTasks: rankingMap[name]
+  }));
+
+  // 🔥 Sort highest delay first
+  return result.sort((a, b) => b.delayedTasks - a.delayedTasks);
 }
 }

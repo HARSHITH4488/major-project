@@ -2,13 +2,17 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Project } from '../project/project.entity';
+import { Task } from '../task/task.entity'; // ✅ adjust path if needed
 
 @Injectable()
 export class DashboardService {
   constructor(
-    @InjectRepository(Project)
-    private readonly projectRepository: Repository<Project>,
-  ) {}
+  @InjectRepository(Project)
+  private readonly projectRepository: Repository<Project>,
+
+  @InjectRepository(Task)   // ✅ ADD THIS
+  private readonly taskRepository: Repository<Task>,
+) {}
 
   async getSummary() {
     const totalProjects = await this.projectRepository.count({
@@ -103,6 +107,19 @@ async getTopRevenueProjects() {
     .orderBy('project.totalAmount', 'DESC')
     .limit(5)
     .getMany();
+
+  return result;
+}
+async getTaskTrend() {
+  const result = await this.taskRepository.query(`
+    SELECT 
+      TO_CHAR("createdAt", 'Dy') as day,
+      COUNT(*) as count
+    FROM tasks
+    WHERE "createdAt" >= NOW() - INTERVAL '7 days'
+    GROUP BY day
+    ORDER BY MIN("createdAt")
+  `);
 
   return result;
 }

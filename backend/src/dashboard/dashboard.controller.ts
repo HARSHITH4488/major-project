@@ -28,6 +28,10 @@ getProjectStatusDistribution() {
 getTopRevenueProjects() {
   return this.dashboardService.getTopRevenueProjects();
 }
+@Get('task-trend')
+getTaskTrend() {
+  return this.dashboardService.getTaskTrend();
+}
 
 }
 
