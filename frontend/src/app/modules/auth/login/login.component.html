@@ -1,0 +1,193 @@
+<div class="login-container">
+
+  <!-- LEFT BRAND PANEL -->
+  <div class="brand-panel">
+    <div class="brand-content">
+
+      <h1>Site Manager</h1>
+
+      <p class="tagline">
+        Intelligent Construction Project Control
+      </p>
+
+      <div class="feature">
+        <span>✔ Project Tracking</span>
+        <span>✔ Contractor Management</span>
+        <span>✔ Payment Monitoring</span>
+      </div>
+
+    </div>
+  </div>
+
+
+  <!-- RIGHT PANEL -->
+  <div class="form-panel">
+
+    <div class="form-card">
+
+      <h2 *ngIf="mode === 'login'">Welcome Back</h2>
+      <h2 *ngIf="mode === 'register'">Create Account</h2>
+
+      <p class="sub-text" *ngIf="mode === 'login'">
+        Login to continue managing your projects
+      </p>
+
+      <p class="sub-text" *ngIf="mode === 'register'">
+        Register to access the Site Manager platform
+      </p>
+
+
+      <!-- LOGIN / REGISTER SWITCH -->
+      <div class="mode-tabs">
+
+        <button
+          type="button"
+          [class.active]="mode === 'login'"
+          (click)="setMode('login')">
+          Login
+        </button>
+
+        <button
+          type="button"
+          [class.active]="mode === 'register'"
+          (click)="setMode('register')">
+          Register
+        </button>
+
+      </div>
+
+
+      <!-- ROLE TABS -->
+      <div class="role-tabs">
+
+        <button
+          *ngIf="mode === 'login'"
+          type="button"
+          [class.active]="selectedRole === 'ADMIN'"
+          (click)="selectRole('ADMIN')">
+          Admin
+        </button>
+
+        <button
+          type="button"
+          [class.active]="selectedRole === 'EMPLOYEE'"
+          (click)="selectRole('EMPLOYEE')">
+          Employee
+        </button>
+
+        <button
+          type="button"
+          [class.active]="selectedRole === 'CONTRACTOR'"
+          (click)="selectRole('CONTRACTOR')">
+          Contractor
+        </button>
+
+      </div>
+
+
+      <!-- LOGIN FORM -->
+      <form
+        *ngIf="mode === 'login'"
+        [formGroup]="loginForm"
+        (ngSubmit)="onLogin()">
+
+        <div class="input-group">
+          <label>Email</label>
+          <input
+            type="email"
+            placeholder="Enter your email"
+            formControlName="email"
+          />
+        </div>
+
+        <div class="input-group">
+          <label>Password</label>
+          <input
+            type="password"
+            placeholder="Enter your password"
+            formControlName="password"
+          />
+        </div>
+
+        <div class="error-message" *ngIf="errorMessage">
+          {{ errorMessage }}
+        </div>
+
+        <button
+          type="submit"
+          class="login-btn"
+          [disabled]="isLoading">
+
+          {{ isLoading ? 'Signing In...' : 'Sign In' }}
+
+        </button>
+
+      </form>
+
+
+      <!-- REGISTER FORM -->
+      <form
+        *ngIf="mode === 'register'"
+        [formGroup]="registerForm"
+        (ngSubmit)="onRegister()">
+
+        <div class="input-group">
+          <label>Name</label>
+          <input
+            type="text"
+            placeholder="Enter your name"
+            formControlName="name"
+          />
+        </div>
+
+        <div class="input-group">
+          <label>Phone</label>
+          <input
+            type="text"
+            placeholder="Enter your phone number"
+            formControlName="phone"
+          />
+        </div>
+
+        <div class="input-group">
+          <label>Email</label>
+          <input
+            type="email"
+            placeholder="Enter your email"
+            formControlName="email"
+          />
+        </div>
+
+        <div class="input-group">
+          <label>Password</label>
+          <input
+            type="password"
+            placeholder="Create password"
+            formControlName="password"
+          />
+        </div>
+
+        <div class="error-message" *ngIf="errorMessage">
+          {{ errorMessage }}
+        </div>
+
+        <div class="success-message" *ngIf="successMessage">
+          {{ successMessage }}
+        </div>
+
+        <button
+          type="submit"
+          class="login-btn"
+          [disabled]="isLoading">
+
+          {{ isLoading ? 'Submitting...' : 'Register' }}
+
+        </button>
+
+      </form>
+
+    </div>
+
+  </div>
+
+</div>

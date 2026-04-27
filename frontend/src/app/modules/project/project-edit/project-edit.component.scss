@@ -1,0 +1,120 @@
+/* Page background */
+.edit-wrapper {
+  min-height: 100vh;
+  background: #f8fafc;
+  padding: 40px 20px;
+  display: flex;
+  justify-content: center;
+}
+
+/* Card */
+.edit-card {
+  width: 100%;
+  max-width: 900px;
+  background: white;
+  border-radius: 10px;
+  padding: 30px 35px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.05);
+}
+
+/* Header */
+.edit-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 25px;
+}
+
+.edit-header h2 {
+  font-size: 22px;
+  font-weight: 600;
+}
+
+.btn-back {
+  background: #f1f5f9;
+  border: none;
+  padding: 6px 12px;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+/* Form Grid */
+.form-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 20px;
+}
+
+/* Full width elements */
+.full-width {
+  grid-column: span 2;
+}
+
+/* Form Groups */
+.form-group {
+  display: flex;
+  flex-direction: column;
+}
+
+label {
+  font-size: 14px;
+  font-weight: 500;
+  margin-bottom: 6px;
+  color: #334155;
+}
+
+input,
+select,
+textarea {
+  padding: 10px 12px;
+  border: 1px solid #d1d5db;
+  border-radius: 6px;
+  font-size: 14px;
+  transition: 0.2s;
+}
+
+input:focus,
+select:focus,
+textarea:focus {
+  outline: none;
+  border-color: #3b82f6;
+}
+
+/* Buttons */
+.form-actions {
+  margin-top: 10px;
+  display: flex;
+  justify-content: flex-end;
+}
+
+.btn-update {
+  background: #3b82f6;
+  color: white;
+  border: none;
+  padding: 8px 18px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+.btn-update:hover {
+  background: #2563eb;
+}
+
+.btn-update:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+/* Loading */
+.loading {
+  font-size: 14px;
+  color: #64748b;
+}
+
+/* Error */
+.error {
+  margin-top: 10px;
+  color: #dc2626;
+  font-size: 14px;
+}

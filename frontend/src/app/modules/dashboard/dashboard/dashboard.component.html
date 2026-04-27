@@ -1,0 +1,133 @@
+<!-- ================= EMPLOYEE DASHBOARD ================= -->
+<div *ngIf="userRole === 'EMPLOYEE'" class="employee-dashboard">
+
+  <!-- HEADER -->
+  <div class="header">
+    <div>
+      <h2>{{ greeting }}, {{ userName }}</h2>
+      <p class="subtitle">Welcome back. Here's your workspace.</p>
+    </div>
+
+    <button class="logout-btn" (click)="logout()">Logout</button>
+  </div>
+
+  <!-- MAIN SECTION -->
+  <div class="section">
+
+    <!-- ✅ PROJECT CARD -->
+    <div class="card main-card" routerLink="/projects">
+      <div>
+        <h3>View Projects</h3>
+        <p>Track assigned projects and progress</p>
+      </div>
+      <span class="arrow">→</span>
+    </div>
+
+    <!-- ✅ TASK SECTION -->
+    <div class="task-section">
+
+      <h3 class="section-title">Today's Tasks</h3>
+
+      <div *ngIf="tasks.length === 0" class="empty">
+        No tasks assigned for today
+      </div>
+
+      <div *ngFor="let task of tasks" class="task-card">
+
+        <div class="task-left">
+          <span [class.completed]="task.isCompleted">
+            {{ task.title }}
+          </span>
+        </div>
+
+        <div class="task-right">
+          
+          <button 
+            *ngIf="!task.isCompleted"
+            (click)="markComplete(task.id)"
+            class="complete-btn">
+            Complete
+          </button>
+
+          <span *ngIf="task.isCompleted" class="done">
+            ✔
+          </span>
+
+        </div>
+
+      </div>
+
+    </div>
+
+  </div>
+
+</div>
+
+
+<!-- ================= ADMIN DASHBOARD ================= -->
+<div *ngIf="userRole === 'ADMIN'" class="admin-layout">
+
+  <!-- SIDEBAR -->
+  <aside class="sidebar">
+    <h2 class="logo">Site Manager</h2>
+
+   <nav>
+ <a routerLink="/dashboard/admin-dashboard" routerLinkActive="active">
+  <span class="material-icons">dashboard</span>
+  Dashboard
+</a>
+
+  <a routerLink="/admin/tasks" routerLinkActive="active">
+    <span class="material-icons">task</span>
+    Daily Tasks
+  </a>
+
+  <a routerLink="/projects" routerLinkActive="active">
+    <span class="material-icons">folder</span>
+    Projects
+  </a>
+
+  <a routerLink="/projects/create" routerLinkActive="active">
+    <span class="material-icons">add_circle</span>
+    Create Project
+  </a>
+
+  <a routerLink="/contractors" routerLinkActive="active">
+    <span class="material-icons">engineering</span>
+    Contractors
+  </a>
+
+  <a routerLink="/dashboard/users" routerLinkActive="active">
+  <span class="material-icons">group</span>
+  Manage Users
+</a>
+
+<a routerLink="/dashboard/requests" routerLinkActive="active">
+  <span class="material-icons">notifications</span>
+  User Requests
+</a>
+</nav>
+  </aside>
+
+  <!-- MAIN CONTENT -->
+  <div class="main">
+
+    <!-- TOPBAR -->
+    <header class="topbar" *ngIf="!hideHeader">
+      <div>
+        <h2>{{ greeting }}, {{ userName }}</h2>
+        <p>Admin Control Panel</p>
+      </div>
+      
+
+      <button (click)="logout()" class="logout-btn">Logout</button>
+    </header>
+
+    <!-- CONTENT -->
+    <div class="content">
+  <router-outlet></router-outlet>
+
+    </div>
+
+  </div>
+</div>

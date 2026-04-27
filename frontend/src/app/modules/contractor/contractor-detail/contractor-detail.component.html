@@ -1,0 +1,187 @@
+<div *ngIf="contractor" class="contractor-page">
+
+  <!-- ================= HEADER CARD ================= -->
+  <div class="contractor-header">
+    <div class="header-left">
+      <h2>{{ contractor.name }}</h2>
+      <span class="nature-badge">
+        {{ contractor.natureOfWork || 'Not Specified' }}
+      </span>
+    </div>
+
+    <div class="header-info">
+      <div>
+        <label>Email</label>
+        <p>{{ contractor.email || '-' }}</p>
+      </div>
+      <div>
+        <label>Phone</label>
+        <p>{{ contractor.phone || '-' }}</p>
+      </div>
+      <div>
+        <label>Company</label>
+        <p>{{ contractor.companyName || '-' }}</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ================= FINANCIAL SUMMARY ================= -->
+  <div class="summary-grid" *ngIf="summary">
+
+    <div class="summary-card">
+      <h3>₹ {{ summary.totalContractValue | number }}</h3>
+      <p>Total Contract Value</p>
+    </div>
+
+    <div class="summary-card paid">
+      <h3>₹ {{ summary.totalPaid | number }}</h3>
+      <p>Total Paid</p>
+    </div>
+
+    <div class="summary-card"
+         [ngClass]="{
+           'remaining-danger': summary.remaining > 0,
+           'remaining-clear': summary.remaining === 0
+         }">
+      <h3>₹ {{ summary.remaining | number }}</h3>
+      <p>Remaining</p>
+    </div>
+
+  </div>
+
+  <!-- ================= TABS ================= -->
+  <div class="tabs">
+    <button [class.active]="activeTab === 'projects'" (click)="setTab('projects')">
+      Projects
+    </button>
+
+    <button [class.active]="activeTab === 'payments'" (click)="setTab('payments')">
+      Payments
+    </button>
+
+    <button [class.active]="activeTab === 'documents'" (click)="setTab('documents')">
+      Documents
+    </button>
+  </div>
+
+  <!-- ================= TAB CONTENT ================= -->
+  <div class="tab-content" [ngSwitch]="activeTab">
+
+    <!-- ================= PROJECTS ================= -->
+    <div *ngSwitchCase="'projects'">
+
+      <table *ngIf="projects?.length" class="modern-table">
+        <thead>
+          <tr>
+            <th>Project</th>
+            <th>Contract</th>
+            <th>Paid</th>
+            <th>Remaining</th>
+          </tr>
+        </thead>
+
+        <tbody>
+          <tr *ngFor="let project of projects">
+            <td>{{ project.projectName }}</td>
+            <td>₹ {{ project.contractAmount | number }}</td>
+            <td>₹ {{ project.totalPaid | number }}</td>
+            <td>
+              <span
+                [ngClass]="{
+                  'danger-text': project.remaining > 0,
+                  'success-text': project.remaining === 0
+                }">
+                ₹ {{ project.remaining | number }}
+              </span>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+
+      <div class="empty-state" *ngIf="!projects?.length">
+        No projects assigned.
+      </div>
+
+    </div>
+
+    <!-- ================= PAYMENTS ================= -->
+    <div *ngSwitchCase="'payments'">
+
+      <div class="payment-header">
+        <h4>Payment History</h4>
+        <button class="btn-primary" (click)="togglePaymentForm()">
+          + Add Payment
+        </button>
+      </div>
+
+      <!-- PAYMENT FORM -->
+      <div *ngIf="showPaymentForm" class="payment-card">
+
+        <form [formGroup]="paymentForm" (ngSubmit)="submitPayment()" class="payment-grid">
+
+          <select formControlName="projectId">
+            <option value="">Select Project</option>
+            <option *ngFor="let p of projects" [value]="p.projectId">
+              {{ p.projectName }}
+            </option>
+          </select>
+
+          <input type="number" placeholder="Amount" formControlName="amount" />
+          <input type="text" placeholder="Payment Type (Cash / Bank / UPI)" formControlName="paymentType" />
+          <input type="date" formControlName="paymentDate" />
+
+          <div class="form-actions">
+            <button type="submit" class="btn-success">Save</button>
+            <button type="button" class="btn-outline" (click)="togglePaymentForm()">
+              Cancel
+            </button>
+          </div>
+
+        </form>
+      </div>
+
+      <!-- PAYMENT TABLE -->
+      <table *ngIf="payments?.length" class="modern-table">
+        <thead>
+          <tr>
+            <th>Project</th>
+            <th>Amount</th>
+            <th>Type</th>
+            <th>Date</th>
+            <th class="text-center">Action</th>
+          </tr>
+        </thead>
+
+        <tbody>
+          <tr *ngFor="let payment of payments">
+            <td>{{ payment.project?.projectName }}</td>
+            <td class="amount">₹ {{ payment.amount | number }}</td>
+            <td>
+              <span class="type-badge">
+                {{ payment.paymentType }}
+              </span>
+            </td>
+            <td>{{ payment.paymentDate | date:'mediumDate' }}</td>
+            <td class="text-center">
+              <button class="btn-danger-sm" (click)="deletePayment(payment.id)">
+                Delete
+              </button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+
+      <div class="empty-state" *ngIf="!payments?.length">
+        No payments found.
+      </div>
+
+    </div>
+
+    <!-- ================= DOCUMENTS ================= -->
+    <div *ngSwitchCase="'documents'" class="empty-state">
+      Documents will be loaded here.
+    </div>
+
+  </div>
+
+</div>
