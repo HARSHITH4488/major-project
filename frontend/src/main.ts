@@ -4,6 +4,8 @@ import { provideAnimations } from '@angular/platform-browser/animations';
 import { provideHttpClient, withInterceptors } from '@angular/common/http';
 import { provideToastr } from 'ngx-toastr';
 
+
+
 import { AppComponent } from './app/app.component';
 import { routes } from './app/app.routes';
 import { authInterceptor } from './app/interceptors/auth.interceptor';
@@ -11,7 +13,7 @@ import { authInterceptor } from './app/interceptors/auth.interceptor';
 bootstrapApplication(AppComponent, {
   providers: [
     provideRouter(routes),
-    provideAnimations(), // Required for Toastr
+    provideAnimations(),
     provideToastr({
       positionClass: 'toast-top-right',
       timeOut: 3000,
@@ -19,6 +21,7 @@ bootstrapApplication(AppComponent, {
     }),
     provideHttpClient(
       withInterceptors([authInterceptor])
-    )
+    ),
+    
   ]
 }).catch(err => console.error(err));

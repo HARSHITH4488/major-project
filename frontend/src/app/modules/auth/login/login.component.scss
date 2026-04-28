@@ -344,3 +344,225 @@ body, input, button {
 form {
   animation: fadeInUp 0.35s ease;
 }
+/* ================= LEFT PANEL FINAL ================= */
+
+.brand-panel {
+  flex: 1;
+  position: relative;
+  overflow: hidden;
+
+  background: linear-gradient(135deg, #020617, #0f172a);
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 60px;
+  color: white;
+}
+
+/* LOGO WATERMARK (CENTERED & CLEAN) */
+.brand-panel::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+
+  background-image: url("/assets/logo.jpeg");
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: 420px;
+
+  opacity: 0.15;
+background-size: 450px;
+  
+  filter: none; /* ❌ remove grayscale */
+
+  z-index: 0;
+}
+
+/* CONTENT ABOVE */
+.brand-content {
+  position: relative;
+  z-index: 2;
+  max-width: 500px;
+}
+
+/* ================= TEXT DESIGN ================= */
+
+.brand-name {
+  font-size: 42px;
+  font-weight: 700;
+  letter-spacing: -1px;
+  margin-bottom: 15px;
+}
+
+.brand-name span {
+  color: #ef4444; /* 🔥 red accent */
+}
+
+/* TAGLINES */
+.tagline {
+  font-size: 18px;
+  color: #cbd5e1;
+  margin-bottom: 10px;
+}
+
+.sub-tagline {
+  font-size: 15px;
+  color: #94a3b8;
+  margin-bottom: 30px;
+}
+
+/* FEATURES */
+.feature span {
+  display: block;
+  font-size: 15px;
+  color: #94a3b8;
+  margin-bottom: 10px;
+}
+.brand-panel::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+
+  background: linear-gradient(
+    135deg,
+    rgba(2,6,23,0.85),
+    rgba(15,23,42,0.9)
+  );
+
+  z-index: 1;
+}
+.brand-content {
+  position: relative;
+  z-index: 2;
+}
+.brand-panel {
+  background: linear-gradient(135deg, #020617, #1e293b);
+}
+.brand-panel::before {
+  background-image:url("/assets/logo.jpeg");
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: 420px;
+
+  opacity: 0.18; /* 🔥 stronger visibility */
+
+  filter: none; /* keep original gold + red */
+
+  z-index: 0;
+}
+.brand-panel::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+
+  background: radial-gradient(
+    circle at center,
+    rgba(255, 204, 0, 0.08),
+    transparent 60%
+  );
+
+  z-index: 1;
+}
+.brand-name {
+  font-size: 42px;
+  font-weight: 700;
+  color: #ffffff;
+}
+
+.brand-name span {
+  color: #ef4444; /* 🔴 matches logo red */
+}
+.brand-name {
+  display: flex;
+  flex-direction: column;
+  line-height: 1.1;
+}
+
+/* TOP TEXT */
+.brand-name .top {
+  font-size: 38px;
+  font-weight: 700;
+  color: #ffffff;
+  letter-spacing: 1px;
+}
+
+/* BOTTOM TEXT */
+.brand-name .bottom {
+  font-size: 42px;
+  font-weight: 800;
+  color: #ef4444; /* 🔴 brand red */
+  letter-spacing: 1px;
+}
+.company-top {
+  font-size: 26px;
+  font-weight: 700;
+  color: #1e293b;
+  margin-bottom: 0;
+}
+
+.company-bottom {
+  font-size: 30px;
+  font-weight: 800;
+  color: #ef4444;
+  margin-top: -4px; /* 🔥 tight alignment */
+}
+.brand-content {
+  position: relative;
+  z-index: 2;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start; /* 🔥 move content up */
+  align-items: flex-start;
+
+  gap: 20px;
+}
+.brand-panel {
+  flex: 1;
+  position: relative;
+  overflow: hidden;
+
+  background: radial-gradient(circle at top left, #1e293b, #020617);
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 60px;
+  color: white;
+}
+
+/* LOGO WATERMARK */
+.brand-panel::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+
+  background: url("/assets/logo.jpeg") ✅ no-repeat center;
+  background-size: 400px;
+
+  opacity: 0.18;
+
+  z-index: 0;
+}
+
+/* GLOW EFFECT */
+.brand-panel::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+
+  background: radial-gradient(
+    circle at center,
+    rgba(212, 175, 55, 0.12),
+    transparent 60%
+  );
+
+  z-index: 1;
+}
+
+/* CONTENT */
+.brand-content {
+  position: relative;
+  z-index: 2;
+}

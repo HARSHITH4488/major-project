@@ -3,22 +3,26 @@
 
   <div class="header">
 
-<div>
-  <h2>{{ project.projectName }}</h2>
-  <p class="client">Client: {{ project.clientName }}</p>
-</div>
-
-<span
-  class="status-badge"
-  [ngClass]="{
-    'planning': project.status === 'PLANNING',
-    'active': project.status === 'ACTIVE'
-  }"
->
-  {{ project.status }}
-</span>
-
+  <!-- LEFT SIDE -->
+  <div class="header-left">
+    <h2 class="project-title">{{ project.projectName }}</h2>
+    <p class="client">Client: {{ project.clientName }}</p>
   </div>
+
+  <!-- RIGHT SIDE -->
+  <div class="header-right">
+    <span
+      class="status-badge"
+      [ngClass]="{
+        'planning': project.status === 'PLANNING',
+        'active': project.status === 'ACTIVE'
+      }"
+    >
+      {{ project.status }}
+    </span>
+  </div>
+
+</div>
 
   <!-- ================= SUMMARY ================= -->
 
@@ -79,25 +83,37 @@
   <div *ngIf="activeTab==='overview'" class="overview-grid">
 
 <div class="overview-card" *ngIf="!isEmployee">
-  <h4>💰 Payments</h4>
+ <h4>
+  <span class="material-icons">payments</span>
+  Payments
+</h4>
   <p class="big-number">{{payments.length}}</p>
   <span class="sub">transactions recorded</span>
 </div>
 
 <div class="overview-card">
-  <h4>👷 Contractors</h4>
+  <h4>
+  <span class="material-icons">groups</span>
+  Contractors
+</h4>
   <p class="big-number">{{assignedContractors.length}}</p>
   <span class="sub">contractors assigned</span>
 </div>
 
 <div class="overview-card">
-  <h4>📅 Schedules</h4>
+  <h4>
+  <span class="material-icons">event</span>
+  Schedules
+</h4>
   <p class="big-number">{{schedules.length}}</p>
   <span class="sub">tasks scheduled</span>
 </div>
 
 <div class="overview-card">
-  <h4>📝 Updates</h4>
+  <h4>
+  <span class="material-icons">update</span>
+  Updates
+</h4>
   <p class="big-number">{{updates.length}}</p>
   <span class="sub">site updates posted</span>
 </div>
@@ -111,13 +127,23 @@
 
 <div class="action-buttons">
 
-  <button class="btn-primary" (click)="showPaymentForm = true">
+  <div class="payment-toggle">
+
+  <button
+    [class.active]="!showPaymentHistory"
+    (click)="showPaymentForm = true; showPaymentHistory = false"
+  >
     + Add Payment
   </button>
 
-  <button class="btn-secondary" (click)="togglePaymentHistory()">
+  <button
+    [class.active]="showPaymentHistory"
+    (click)="showPaymentHistory = true"
+  >
     Payment History
   </button>
+
+</div>
 
 </div>
 
@@ -125,20 +151,19 @@
 
   <h3>Add Payment</h3>
 
-  <div class="form-row">
-    <div>
+  <div class="form-grid">
+
+    <div class="form-group">
       <label>Amount</label>
       <input type="number" [(ngModel)]="paymentData.amount" />
     </div>
 
-    <div>
+    <div class="form-group">
       <label>Date</label>
       <input type="date" [(ngModel)]="paymentData.paymentDate" />
     </div>
-  </div>
 
-  <div class="form-row">
-    <div>
+    <div class="form-group">
       <label>Payment Type</label>
       <select [(ngModel)]="paymentData.paymentType">
         <option value="ADVANCE">Advance</option>
@@ -146,7 +171,7 @@
       </select>
     </div>
 
-    <div>
+    <div class="form-group">
       <label>Payment Mode</label>
       <select [(ngModel)]="paymentData.paymentMode">
         <option value="BANK">Bank</option>
@@ -154,13 +179,15 @@
         <option value="CASH">Cash</option>
       </select>
     </div>
+
+    <div class="form-group full-width">
+      <label>Notes</label>
+      <textarea rows="3" [(ngModel)]="paymentData.notes"></textarea>
+    </div>
+
   </div>
 
-  <div class="form-row full">
-    <label>Notes</label>
-    <textarea rows="3" [(ngModel)]="paymentData.notes"></textarea>
-  </div>
-
+  <!-- ACTIONS -->
   <div class="form-actions">
     <button class="btn-cancel" (click)="showPaymentForm=false">
       Cancel
@@ -205,10 +232,11 @@
 
         <td>
           <button
-            class="btn-delete"
-            (click)="onDeletePayment(payment.id)">
-            Delete
-          </button>
+  class="btn-delete"
+  (click)="onDeletePayment(payment.id)"
+>
+  🗑 Delete
+</button>
         </td>
 
       </tr>
@@ -307,21 +335,20 @@
   Manage project schedules, timeline, and task planning.
 </p>
 
-<div class="schedule-actions">
+<div class="schedule-toggle">
 
   <button
-    class="btn-primary"
-    (click)="openSchedulePage()">
+    class="active"
+    (click)="openSchedulePage()"
+  >
     + Schedule Work
   </button>
 
   <button
-    class="btn-secondary"
-    (click)="openTimelinePage()">
+    (click)="openTimelinePage()"
+  >
     View Timeline
   </button>
-
-  
 
 </div>
 
@@ -330,13 +357,19 @@
 
  <!-- ================= UPDATES ================= -->
 
-<div *ngIf="activeTab === 'updates'">
+<div *ngIf="activeTab === 'updates'" class="updates-wrapper">
 
   <h3>Project Updates</h3>
 
-  <div *ngIf="updates.length === 0">
-    No updates yet
-  </div>
+  <div *ngIf="updates.length === 0" class="empty-updates">
+
+  <div class="empty-icon">📝</div>
+
+  <h4>No updates yet</h4>
+
+  <p>Project updates from contractors will appear here.</p>
+
+</div>
 
   <!-- ✅ IMPORTANT: loop INSIDE ngIf -->
   <div *ngFor="let u of updates" class="update-card">
@@ -376,7 +409,7 @@
   </div>
 
 </div>
- <!-- ================= DOCUMENTS ================= -->
+
 
 <!-- ================= DOCUMENTS ================= -->
 
@@ -547,13 +580,7 @@
 
     </div>
 
-    <!-- 👁 VIEW -->
-    <button
-      class="btn-view"
-      (click)="previewDocument(doc)"
-    >
-      View
-    </button>
+    
 
     <!-- ⬇ DOWNLOAD -->
     <button

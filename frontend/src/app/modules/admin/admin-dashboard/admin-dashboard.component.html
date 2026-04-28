@@ -1,6 +1,185 @@
 <div class="dashboard-page">
 
-  <h2>Admin Dashboard</h2>
-  <p>This is your main dashboard page</p>
+  <!-- HEADER -->
+  <div class="header">
+    
+  </div>
+
+  <!-- STATS -->
+  <div class="stat-grid">
+
+    <div class="stat-card stat-blue">
+      <div class="icon">
+        <span class="material-icons">folder</span>
+      </div>
+      <h2>{{ totalProjects }}</h2>
+      <p>Total Projects</p>
+    </div>
+
+    <div class="stat-card stat-green">
+      <div class="icon">
+        <span class="material-icons">check_circle</span>
+      </div>
+      <h2>{{ activeProjects }}</h2>
+      <p>Active Projects</p>
+    </div>
+
+    <div class="stat-card stat-orange">
+      <div class="icon">
+        <span class="material-icons">event</span>
+      </div>
+      <h2>{{ totalTasks }}</h2>
+      <p>Tasks Today</p>
+    </div>
+
+    <div class="stat-card stat-purple">
+      <div class="icon">
+        <span class="material-icons">star</span>
+      </div>
+      <h2>{{ completedTasks }}</h2>
+      <p>Completed Tasks</p>
+    </div>
+
+  </div>
+
+  <!-- CHARTS -->
+  <div class="section-grid">
+
+    <!-- Doughnut -->
+    <div class="card">
+      <h3 class="card-title">Project Status</h3>
+
+      <div class="status-layout">
+
+        <!-- Chart -->
+        <div class="chart-box">
+          <canvas
+            baseChart
+            [data]="projectChartData"
+            [options]="projectChartOptions"
+            [type]="'doughnut'">
+          </canvas>
+
+          <div class="chart-center">
+            <h2>{{ projectTotal }}</h2>
+            <p>Total</p>
+          </div>
+        </div>
+
+        <!-- Legend -->
+        <div class="legend">
+
+          <div class="legend-item">
+            <span class="dot green"></span>
+            <span>Completed</span>
+          </div>
+
+          <div class="legend-item">
+            <span class="dot blue"></span>
+            <span>Active</span>
+          </div>
+
+          <div class="legend-item">
+            <span class="dot red"></span>
+            <span>Delayed</span>
+          </div>
+
+        </div>
+
+      </div>
+    </div>
+
+    <!-- Line Chart -->
+    <div class="card">
+      <h3 class="card-title">Tasks Trend</h3>
+
+      <canvas
+        baseChart
+        [data]="taskTrendData"
+        [options]="taskTrendOptions"
+        [type]="'line'">
+      </canvas>
+    </div>
+
+  </div>
+
+  <!-- BOTTOM GRID -->
+  <div class="bottom-grid">
+
+    <!-- Notifications -->
+    <div class="card" *ngIf="reminders.length > 0">
+      <div class="section-header">
+        <h3>Notifications</h3>
+        <span class="badge">{{ reminders.length }}</span>
+      </div>
+
+      <div class="list">
+        <div class="item warning" *ngFor="let r of reminders">
+          <div class="icon">
+            <span class="material-icons">warning</span>
+          </div>
+          <div>
+            <div class="title">{{ r.workName }}</div>
+            <div class="subtitle">
+              Project: {{ r.project?.name || r.project?.projectName }}
+            </div>
+            <div class="highlight">
+              Ends {{ r.endDate | date:'mediumDate' }}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Delayed -->
+    <div class="card danger" *ngIf="delayedTasks.length > 0">
+      <div class="section-header">
+        <h3>Delayed Tasks</h3>
+        <span class="badge">{{ delayedTasks.length }}</span>
+      </div>
+
+      <div class="list">
+        <div class="item danger" *ngFor="let task of delayedTasks">
+          <div class="icon">
+            <span class="material-icons">schedule</span>
+          </div>
+          <div>
+            <div class="title">
+              {{ task.title || task.workName }}
+            </div>
+            <div class="subtitle">
+              Project: {{ task.assignment?.schedule?.project?.projectName }}
+            </div>
+            <div class="subtitle">
+              Assigned: {{ task.contractor?.name }}
+            </div>
+            <div class="highlight">
+              Delayed by {{ getDelayDays(task.endDate) }} days
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Ranking -->
+    <div class="card" *ngIf="delayRanking.length > 0">
+      <div class="section-header">
+        <h3>Contractor Ranking</h3>
+      </div>
+
+      <div class="list">
+        <div class="item" *ngFor="let r of delayRanking; let i = index">
+          <div class="icon">
+            <span class="material-icons">emoji_events</span>
+          </div>
+          <div>
+            <div class="title">#{{ i + 1 }} {{ r.contractor }}</div>
+            <div class="highlight">{{ r.delayedTasks }} delayed tasks</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
 
 </div>

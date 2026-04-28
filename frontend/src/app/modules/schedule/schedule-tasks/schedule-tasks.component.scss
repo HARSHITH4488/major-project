@@ -258,3 +258,25 @@ tbody tr:hover {
   border-radius: 12px;
   box-shadow: 0 4px 12px rgba(0,0,0,0.05);
 }
+.overdue {
+  background: #fee2e2;
+  color: #991b1b;
+  padding: 6px 12px;
+  border-radius: 20px;
+  font-weight: 600;
+}
+
+.planned {
+  background: #e0f2fe;
+  color: #0369a1;
+}
+
+.progress {
+  background: #fef9c3;
+  color: #92400e;
+}
+
+.completed {
+  background: #dcfce7;
+  color: #166534;
+}

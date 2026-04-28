@@ -81,7 +81,15 @@
           <td>{{ task.endDate | date }}</td>
 
           <td>
-            <span
+            <!-- 🔴 OVERDUE FIRST -->
+  <span *ngIf="isOverdue(task)" class="overdue">
+    OVERDUE
+  </span>
+
+  <!-- 🟡 NORMAL STATUS -->
+  <span
+    *ngIf="!isOverdue(task)"
+            
               [ngClass]="{
                 'planned': task.status === 'PLANNED',
                 'progress': task.status === 'IN_PROGRESS',

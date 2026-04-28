@@ -1,104 +1,113 @@
-/* Page background */
+/* PAGE */
 .edit-wrapper {
   min-height: 100vh;
-  background: #f8fafc;
+  background: linear-gradient(135deg, #eef2ff, #ecfdf5, #f1f5f9);
   padding: 40px 20px;
   display: flex;
   justify-content: center;
 }
 
-/* Card */
+/* CARD */
 .edit-card {
   width: 100%;
-  max-width: 900px;
-  background: white;
-  border-radius: 10px;
-  padding: 30px 35px;
-  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.05);
+  max-width: 850px;
+  background: #ffffff;
+  border-radius: 16px;
+  padding: 28px 32px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.06);
 }
 
-/* Header */
+/* HEADER */
 .edit-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 25px;
+  margin-bottom: 20px;
 }
 
 .edit-header h2 {
-  font-size: 22px;
+  font-size: 20px;
   font-weight: 600;
+  color: #1e293b;
 }
 
 .btn-back {
   background: #f1f5f9;
   border: none;
   padding: 6px 12px;
-  border-radius: 6px;
+  border-radius: 8px;
   cursor: pointer;
+  font-size: 13px;
 }
 
-/* Form Grid */
+.btn-back:hover {
+  background: #e2e8f0;
+}
+
+/* FORM GRID */
 .form-grid {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
-  gap: 20px;
+  gap: 18px;
 }
 
-/* Full width elements */
-.full-width {
-  grid-column: span 2;
-}
-
-/* Form Groups */
+/* FORM GROUP */
 .form-group {
   display: flex;
   flex-direction: column;
 }
 
+/* LABEL */
 label {
-  font-size: 14px;
+  font-size: 13px;
   font-weight: 500;
-  margin-bottom: 6px;
-  color: #334155;
+  margin-bottom: 5px;
+  color: #475569;
 }
 
+/* INPUTS */
 input,
-select,
-textarea {
+select {
   padding: 10px 12px;
-  border: 1px solid #d1d5db;
-  border-radius: 6px;
+  border: 1px solid #e2e8f0;
+  border-radius: 10px;
   font-size: 14px;
-  transition: 0.2s;
+  transition: all 0.2s;
+  background: #f8fafc;
 }
 
 input:focus,
-select:focus,
-textarea:focus {
+select:focus {
   outline: none;
   border-color: #3b82f6;
+  background: #ffffff;
+  box-shadow: 0 0 0 2px rgba(59,130,246,0.1);
 }
 
-/* Buttons */
+/* ACTIONS */
 .form-actions {
-  margin-top: 10px;
+  grid-column: span 2;
   display: flex;
   justify-content: flex-end;
+  margin-top: 10px;
 }
 
+/* BUTTON */
 .btn-update {
-  background: #3b82f6;
+  background: linear-gradient(135deg, #3b82f6, #2563eb);
   color: white;
   border: none;
-  padding: 8px 18px;
-  border-radius: 6px;
+  padding: 10px 20px;
+  border-radius: 10px;
   cursor: pointer;
   font-size: 14px;
+  font-weight: 500;
+  transition: 0.3s;
 }
 
 .btn-update:hover {
-  background: #2563eb;
+  transform: translateY(-1px);
+  box-shadow: 0 6px 12px rgba(59,130,246,0.2);
 }
 
 .btn-update:disabled {
@@ -106,15 +115,16 @@ textarea:focus {
   cursor: not-allowed;
 }
 
-/* Loading */
+/* LOADING */
 .loading {
   font-size: 14px;
   color: #64748b;
 }
 
-/* Error */
+/* ERROR */
 .error {
+  grid-column: span 2;
   margin-top: 10px;
   color: #dc2626;
-  font-size: 14px;
+  font-size: 13px;
 }

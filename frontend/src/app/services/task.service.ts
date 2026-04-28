@@ -55,5 +55,18 @@ export class TaskService {
   deleteTask(id: number) {
     return this.http.delete(`${this.api}/${id}`);
   }
+  
+getDelayedSchedules() {
+  return this.http.get(`${environment.apiUrl}/schedules/delayed`);
+}
+getDelayRanking() {
+  return this.http.get(`${environment.apiUrl}/schedules/delay-ranking`);
+}
 
+// ✅ TASK TREND (Analytics)
+getTaskTrend() {
+  return this.http.get(
+    `${environment.apiUrl}/dashboard/task-trend`
+  );
+}
 }

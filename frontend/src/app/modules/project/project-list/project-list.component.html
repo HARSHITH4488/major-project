@@ -1,119 +1,137 @@
-<!-- Loading -->
-<div *ngIf="loading" class="text-center mt-4">
-  Loading projects...
-</div>
+<div class="project-page">
 
-<!-- No Data -->
-<div *ngIf="!loading && projects.length === 0" class="text-center mt-4">
-  No projects found.
-</div>
+  <!-- HEADER -->
+  <div class="page-header">
+    <h2>Projects</h2>
+    <button class="create-btn" routerLink="/projects/create">
+      + New Project
+    </button>
+  </div>
 
-<!-- Project Table -->
-<table class="project-table" *ngIf="!loading && projects.length > 0">
+  <!-- LOADING -->
+  <div *ngIf="loading" class="state">Loading projects...</div>
 
-  <thead>
-    <tr>
-      <th>Name</th>
-      <th>Client</th>
-      <th>Start Date</th>
-      <th>End Date</th>
-      <th>Budget</th>
-      <th>Status</th>
-      <th class="text-center">Actions</th>
-    </tr>
-  </thead>
+  <!-- EMPTY -->
+  <div *ngIf="!loading && projects.length === 0" class="state">
+    No projects found.
+  </div>
 
-  <tbody>
-    <tr *ngFor="let project of projects">
+  <!-- CARD GRID -->
+  <div class="project-grid" *ngIf="!loading && projects.length > 0">
 
-      <td class="project-name">
-        {{ project?.projectName }}
-      </td>
-
-      <td>{{ project?.clientName }}</td>
-
-      <td>{{ project?.startDate | date:'mediumDate' }}</td>
-
-      <td>
-        {{ project?.endDate ? (project?.endDate | date:'mediumDate') : '-' }}
-      </td>
-
-      <td class="budget">
-        ₹ {{ project?.totalAmount | number:'1.2-2' }}
-      </td>
-
-      <td>
-        <span
-          class="status-badge"
-          [ngClass]="{
-            'active': project?.status === 'ACTIVE',
-            'planning': project?.status === 'PLANNING'
-          }"
-        >
-          {{ project?.status }}
+    <div class="project-card" *ngFor="let project of projects; let i = index">
+      <!-- HEADER -->
+      <div class="card-header">
+        <span class="project-id">#{{ i + 1 }}</span>
+        <span class="status" [ngClass]="project.status.toLowerCase()">
+          {{ project.status }}
         </span>
-      </td>
+      </div>
 
-      <td class="actions">
-        <button
-          class="btn btn-view"
-          (click)="viewProject(project.id)">
-          View
+      <!-- TITLE -->
+      <h3 class="project-title">{{ project.projectName }}</h3>
+
+      <!-- CLIENT -->
+      <p class="client">
+        <span class="material-icons">person</span>
+        {{ project.clientName }}
+      </p>
+
+      <!-- DETAILS -->
+      <div class="details">
+
+        <div class="item">
+          <span>
+            <span class="material-icons">calendar_today</span>
+            Timeline
+          </span>
+          <strong>
+            {{ project.startDate | date:'MMM d' }} →
+            {{ project.endDate | date:'MMM d' }}
+          </strong>
+        </div>
+
+        <div class="item">
+          <span>
+            <span class="material-icons">account_balance_wallet</span>
+            Budget
+          </span>
+          <strong>
+            ₹ {{ project.totalAmount | number:'1.0-0':'en-IN' }}
+          </strong>
+        </div>
+
+        <div class="item">
+          <span>
+            <span class="material-icons">analytics</span>
+            Progress
+          </span>
+
+          <div class="progress-bar">
+            <div
+              class="progress-fill"
+              [style.width.%]="project.progress || 0">
+            </div>
+          </div>
+
+          <small>{{ project.progress || 0 }}%</small>
+        </div>
+
+      </div>
+
+      <!-- ACTIONS -->
+      <div class="actions">
+
+        <button class="view" (click)="viewProject(project.id)">
+          <span class="material-icons">visibility</span>
         </button>
 
-        <button
-          class="btn btn-edit"
-          [routerLink]="['/projects/edit', project.id]">
-          Edit
+        <button class="edit" [routerLink]="['/projects/edit', project.id]">
+          <span class="material-icons">edit</span>
         </button>
 
-        <button
-          class="btn btn-delete"
-          (click)="openDeleteModal(project.id)">
-          Delete
+        <button class="delete" (click)="openDeleteModal(project.id)">
+          <span class="material-icons">delete</span>
         </button>
-      </td>
 
-    </tr>
-  </tbody>
-</table>
+      </div>
 
-<!-- Pagination -->
-<div class="pagination-container" *ngIf="totalPages > 1">
+    </div>
 
-  <button
-    class="btn btn-sm btn-secondary"
-    [disabled]="currentPage === 1"
-    (click)="prevPage()">
-    Previous
-  </button>
+  </div>
 
-  <span class="mx-2">
-    Page {{ currentPage }} of {{ totalPages }}
-  </span>
+  <!-- PAGINATION -->
+  <div class="pagination" *ngIf="totalPages > 1">
+    <button (click)="prevPage()" [disabled]="currentPage === 1">
+      ← Prev
+    </button>
 
-  <button
-    class="btn btn-sm btn-secondary"
-    [disabled]="currentPage === totalPages"
-    (click)="nextPage()">
-    Next
-  </button>
+    <span>Page {{ currentPage }} of {{ totalPages }}</span>
+
+    <button (click)="nextPage()" [disabled]="currentPage === totalPages">
+      Next →
+    </button>
+  </div>
 
 </div>
-<!-- DELETE CONFIRMATION MODAL -->
+
+<!-- MODAL (unchanged) -->
 <div class="modal-overlay" *ngIf="showDeleteModal">
-  <div class="modal-box">
-    <h3>Confirm Delete</h3>
-    <p>Are you sure you want to delete this project?</p>
+  <div class="modal-card">
+
+    <div class="modal-icon">⚠️</div>
+
+    <h2>Delete Project</h2>
+
+    <p class="modal-text">
+      Are you sure you want to delete this project? <br />
+      <span>This action cannot be undone.</span>
+    </p>
 
     <div class="modal-actions">
-      <button class="btn btn-cancel" (click)="closeModal()">
-        Cancel
-      </button>
-
-      <button class="btn btn-delete" (click)="confirmDelete()">
-        Confirm
-      </button>
+      <button class="btn-cancel" (click)="closeModal()">Cancel</button>
+      <button class="btn-delete" (click)="confirmDelete()">Delete</button>
     </div>
+
   </div>
 </div>

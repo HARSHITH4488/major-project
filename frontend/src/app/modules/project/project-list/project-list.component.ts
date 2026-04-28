@@ -49,6 +49,9 @@ export class ProjectListComponent implements OnInit {
 
       // ✅ Correct mapping based on your real response
       this.projects = res?.data?.data || [];
+      this.projects.forEach(project => {
+  this.calculateProjectProgress(project.id, project);
+});
       this.totalRecords = res?.data?.total || 0;
       this.totalPages = res?.data?.totalPages || 1;
 
@@ -59,6 +62,51 @@ export class ProjectListComponent implements OnInit {
       this.loading = false;
     }
   });
+}
+
+calculateProjectProgress(projectId: number, project: any) {
+
+  this.projectService.getSchedulesByProject(projectId).subscribe((res: any) => {
+
+    const schedules = res?.data || res || [];
+
+    if (!schedules.length) {
+      project.progress = 0;
+      return;
+    }
+
+    let totalTasks = 0;
+    let completedTasks = 0;
+    let completedCalls = 0;
+
+    schedules.forEach((schedule: any) => {
+
+      this.projectService.getScheduleTasks(schedule.id).subscribe((taskRes: any) => {
+
+        const tasks = taskRes?.data || taskRes || [];
+
+        totalTasks += tasks.length;
+
+        completedTasks += tasks.filter(
+          (t: any) => t.status === 'COMPLETED'
+        ).length;
+
+        completedCalls++;
+
+        // ✅ When all schedules processed
+        if (completedCalls === schedules.length) {
+
+          project.progress = totalTasks === 0
+            ? 0
+            : Math.round((completedTasks / totalTasks) * 100);
+        }
+
+      });
+
+    });
+
+  });
+
 }
 
   /* ===============================
@@ -85,25 +133,29 @@ export class ProjectListComponent implements OnInit {
   }
 
   confirmDelete() {
-    if (!this.selectedProjectId) return;
+  if (this.selectedProjectId === null) return;
 
-    this.projectService.delete(this.selectedProjectId).subscribe({
-      next: () => {
+  console.log('Deleting ID:', this.selectedProjectId);
 
-        this.closeModal();
+  this.projectService.delete(this.selectedProjectId).subscribe({
+    next: () => {
+      console.log('Delete success');
 
-        // ✅ Smart page adjustment after delete
-        if (this.projects.length === 1 && this.currentPage > 1) {
-          this.loadProjects(this.currentPage - 1);
-        } else {
-          this.loadProjects(this.currentPage);
-        }
-      },
-      error: (err: any) => {
-        console.error(err);
-      }
-    });
-  }
+      this.closeModal();
+
+      // refresh list
+      this.loadProjects(
+        this.projects.length === 1 && this.currentPage > 1
+          ? this.currentPage - 1
+          : this.currentPage
+      );
+    },
+    error: (err) => {
+      console.error('Delete failed:', err);
+      alert('Delete failed!');
+    }
+  });
+}
 
   /* ===============================
      PAGINATION

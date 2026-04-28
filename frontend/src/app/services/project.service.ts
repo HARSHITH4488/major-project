@@ -191,5 +191,18 @@ deleteScheduleTask(taskId: number) {
     `${environment.apiUrl}/schedule-tasks/${taskId}`
   );
 }
+getTodayReminders() {
+  return this.http.get(
+    `${environment.apiUrl}/schedules/today-reminders`
+  );
+}
+// ===============================
+// DASHBOARD ANALYTICS
+// ===============================
+getProjectStatus() {
+  return this.http.get(
+    `${environment.apiUrl}/dashboard/status-distribution`
+  );
+}
 
 }

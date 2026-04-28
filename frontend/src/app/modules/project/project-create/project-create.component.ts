@@ -19,7 +19,6 @@ import { ToastComponent } from '../../../shared/toast/toast.component';
 })
 export class ProjectCreateComponent {
 
-  // ---------------- STATE ----------------
   loading = false;
   submitted = false;
   serverError = '';
@@ -29,7 +28,6 @@ export class ProjectCreateComponent {
 
   projectForm!: FormGroup;
 
-  // ---------------- CONSTRUCTOR ----------------
   constructor(
     private fb: FormBuilder,
     private projectService: ProjectService,
@@ -50,7 +48,6 @@ export class ProjectCreateComponent {
     );
   }
 
-  // ---------------- CUSTOM DATE VALIDATOR ----------------
   private dateValidator(group: FormGroup) {
     const start = group.get('startDate')?.value;
     const end = group.get('endDate')?.value;
@@ -62,55 +59,60 @@ export class ProjectCreateComponent {
       : { invalidDateRange: true };
   }
 
-  // ---------------- FORM GETTER ----------------
   get f() {
     return this.projectForm.controls as any;
   }
 
-  // ---------------- SUBMIT ----------------
-onSubmit() {
-  this.submitted = true;
-  this.serverError = '';
-
-  if (this.projectForm.invalid) return;
-
-  this.loading = true;
-
-  const {
-    projectName,
-    projectType,
-    clientName,
-    startDate,
-    endDate,
-    totalAmount,
-    status,
-    description
-  } = this.projectForm.value;
-
-  const payload = {
-    projectName,
-    projectType,
-    clientName,
-    startDate,
-    endDate,
-    totalAmount: Number(totalAmount),
-    status,
-    description
-  };
-
-  this.projectService.create(payload).subscribe({
-  next: (res: any) => {
-    this.loading = false;
-
-    this.toastMessage = 'Project created successfully!';
-    this.showToast = true;
-
-    setTimeout(() => {
-      this.router.navigate(['/projects']);
-    }, 1000);
-  },
-  error: (err: any) => {
-    this.loading = false;
-    this.serverError = err?.error?.message || 'Something went wrong';
+  // ✅ BACK FUNCTION (NEW)
+  goBack() {
+    this.router.navigate(['/projects']);
   }
-});}}
+
+  onSubmit() {
+    this.submitted = true;
+    this.serverError = '';
+
+    if (this.projectForm.invalid) return;
+
+    this.loading = true;
+
+    const {
+      projectName,
+      projectType,
+      clientName,
+      startDate,
+      endDate,
+      totalAmount,
+      status,
+      description
+    } = this.projectForm.value;
+
+    const payload = {
+      projectName,
+      projectType,
+      clientName,
+      startDate,
+      endDate,
+      totalAmount: Number(totalAmount),
+      status,
+      description
+    };
+
+    this.projectService.create(payload).subscribe({
+      next: () => {
+        this.loading = false;
+
+        this.toastMessage = 'Project created successfully!';
+        this.showToast = true;
+
+        setTimeout(() => {
+          this.router.navigate(['/projects']);
+        }, 1000);
+      },
+      error: (err: any) => {
+        this.loading = false;
+        this.serverError = err?.error?.message || 'Something went wrong';
+      }
+    });
+  }
+}

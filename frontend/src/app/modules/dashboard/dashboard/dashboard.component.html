@@ -34,28 +34,36 @@
 
       <div *ngFor="let task of tasks" class="task-card">
 
-        <div class="task-left">
-          <span [class.completed]="task.isCompleted">
-            {{ task.title }}
-          </span>
-        </div>
+  <!-- LEFT -->
+  <div class="task-info">
+    <h4 [class.completed]="task.isCompleted">
+      {{ task.title }}
+    </h4>
 
-        <div class="task-right">
-          
-          <button 
-            *ngIf="!task.isCompleted"
-            (click)="markComplete(task.id)"
-            class="complete-btn">
-            Complete
-          </button>
+    <div class="meta">
+      📅 {{ task.startDate | date:'mediumDate' }}
+    </div>
+  </div>
 
-          <span *ngIf="task.isCompleted" class="done">
-            ✔
-          </span>
+  <!-- RIGHT -->
+  <div class="task-actions">
 
-        </div>
+    <span 
+      class="status-badge"
+      [ngClass]="task.isCompleted ? 'done' : 'pending'">
+      {{ task.isCompleted ? 'Completed' : 'Pending' }}
+    </span>
 
-      </div>
+    <button 
+      *ngIf="!task.isCompleted"
+      (click)="markComplete(task.id)"
+      class="complete-btn">
+      Mark Done
+    </button>
+
+  </div>
+
+</div>
 
     </div>
 
@@ -69,7 +77,7 @@
 
   <!-- SIDEBAR -->
   <aside class="sidebar">
-    <h2 class="logo">Site Manager</h2>
+    <h2 class="logo">DESTINATION DESIGNS</h2>
 
    <nav>
  <a routerLink="/dashboard/admin-dashboard" routerLinkActive="active">
