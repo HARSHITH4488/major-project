@@ -1,17 +1,17 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
+import { environment } from '../../../environments/environment';
 
 @Injectable({
   providedIn: 'root'
 })
 export class ContractorService {
+  private api = environment.apiUrl;
 
-  private baseUrl = 'http://localhost:3000/contractors';
-
-  // ✅ CORRECT — use contractor-payments module
-  private paymentUrl = 'http://localhost:3000/contractor-payments';
-  private scheduleUrl = 'http://localhost:3000/schedules';
+  private baseUrl = `${this.api}/contractors`;
+private paymentUrl = `${this.api}/contractor-payments`;
+private scheduleUrl = `${this.api}/schedules`;
 
   constructor(private http: HttpClient) {}
 
@@ -47,8 +47,8 @@ export class ContractorService {
 
   getContractorSummary(userId:number){
   return this.http.get(
-    `http://localhost:3000/schedules/contractor-summary/${userId}`
-  );
+  `${this.api}/schedules/contractor-summary/${userId}`
+);
 }
 
   getProjectFinancials(id: number): Observable<any> {
@@ -71,9 +71,9 @@ export class ContractorService {
 
   createContractorPayment(data: any) {
   return this.http.post(
-    'http://localhost:3000/contractor-payments',
-    data
-  );
+  `${this.api}/contractor-payments`,
+  data
+);
 }
 
   // ====================================================
@@ -90,7 +90,7 @@ export class ContractorService {
 // =======================================
 
 getApprovedContractors(): Observable<any> {
-  return this.http.get('http://localhost:3000/users/approved-contractors');
+  return this.http.get(`${this.api}/users/approved-contractors`);
 }
 /// =======================================
 // CONTRACTOR TASKS
@@ -98,8 +98,8 @@ getApprovedContractors(): Observable<any> {
 
 getMyTasks(userId:number){
   return this.http.get(
-    `http://localhost:3000/schedules/tasks/user/${userId}`
-  );
+  `${this.api}/schedules/tasks/user/${userId}`
+);
 }
 
 startTask(taskId: number): Observable<any> {
@@ -121,14 +121,14 @@ finishTask(taskId: number): Observable<any> {
 
 getContractorByUser(userId: number): Observable<any> {
   return this.http.get(
-    `http://localhost:3000/contractors/by-user/${userId}`
-  );
+  `${this.api}/contractors/by-user/${userId}`
+);
 }
 
 getContractorProjects(contractorId: number): Observable<any> {
   return this.http.get(
-    `http://localhost:3000/contractors/${contractorId}/projects`
-  );
+  `${this.api}/contractors/${contractorId}/projects`
+);
 }
 // =======================================
 // 🔥 PROJECT UPDATES (UPLOAD)
@@ -136,8 +136,8 @@ getContractorProjects(contractorId: number): Observable<any> {
 
 uploadProjectUpdate(formData: FormData): Observable<any> {
   return this.http.post(
-    'http://localhost:3000/project-updates',
-    formData
-  );
+  `${this.api}/project-updates`,
+  formData
+);
 }
 }
