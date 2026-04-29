@@ -400,10 +400,10 @@
     <!-- Image -->
     <div class="update-image-container" *ngIf="u.photo">
       <img
-        [src]="'http://localhost:3000/uploads/project-updates/' + u.photo"
-        class="update-img"
-        (click)="previewImage(u.photo)"
-      />
+  [src]="apiUrl + '/uploads/project-updates/' + u.photo"
+  class="update-img"
+  (click)="previewImage(u.photo)"
+/>
     </div>
 
   </div>

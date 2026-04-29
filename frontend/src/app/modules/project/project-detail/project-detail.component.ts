@@ -10,6 +10,7 @@ import { Router } from '@angular/router';
 import { ViewChild, ElementRef } from '@angular/core';
 import { ProjectUpdatesService } from '../../../services/project-updates.service';
 import { RouterModule } from '@angular/router';
+import { environment } from '../../../../environments/environment';
 @Component({
   selector: 'app-project-detail',
   standalone: true,
@@ -24,6 +25,7 @@ export class ProjectDetailComponent implements OnInit {
   projectId!: number;
   project: any;
   isEmployee: boolean = false;
+  apiUrl = environment.apiUrl;
 loadDocuments() {
 
   if (!this.projectId) return;
@@ -635,7 +637,7 @@ previewImage(photo: string) {
 
   if (!photo) return;
 
-  const imageUrl = 'http://localhost:3000/uploads/project-updates/' + photo;
+ const imageUrl = `${this.apiUrl}/uploads/project-updates/${photo}`;
 
   Swal.fire({
     imageUrl: imageUrl,
