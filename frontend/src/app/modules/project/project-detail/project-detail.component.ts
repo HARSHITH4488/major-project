@@ -477,22 +477,19 @@ ngOnInit(): void {
      LOAD ASSIGNED CONTRACTORS
   =================================*/
 loadAssignedContractors() {
-  this.projectService.getProjectContractors(this.projectId).subscribe({
-    next: (res: any) => {
+    this.projectService.getProjectContractors(this.projectId).subscribe({
+      next: (res: any) => {
 
-      const data = res?.data || [];
+        if (res?.data) {
+          this.assignedContractors = res.data;
+        } else {
+          this.assignedContractors = res || [];
+        }
 
-      // ✅ FIX: remove null contractors BEFORE mapping
-      this.assignedContractors = data
-        .filter((item: any) => item && item.contractor) // 💥 key fix
-        .map((item: any) => item.contractor);
-
-      console.log('Assigned Contractors:', this.assignedContractors);
-
-    },
-    error: (err: any) => console.error(err)
-  });
-}
+      },
+      error: (err: any) => console.error(err)
+    });
+  }
 
   /* ===============================
      LOAD SCHEDULES
