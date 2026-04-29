@@ -476,21 +476,21 @@ ngOnInit(): void {
   /* ===============================
      LOAD ASSIGNED CONTRACTORS
   =================================*/
+loadAssignedContractors() {
+  this.projectService.getProjectContractors(this.projectId).subscribe({
+    next: (res: any) => {
 
-  loadAssignedContractors() {
-    this.projectService.getProjectContractors(this.projectId).subscribe({
-      next: (res: any) => {
+      const data = res?.data || res || [];
 
-        if (res?.data) {
-          this.assignedContractors = res.data;
-        } else {
-          this.assignedContractors = res || [];
-        }
+      // ✅ FLATTEN DATA (THIS IS THE FIX)
+      this.assignedContractors = data.map((item: any) => item.contractor || item);
 
-      },
-      error: (err: any) => console.error(err)
-    });
-  }
+      console.log('Assigned Contractors:', this.assignedContractors);
+
+    },
+    error: (err: any) => console.error(err)
+  });
+}
 
   /* ===============================
      LOAD SCHEDULES
