@@ -1,13 +1,13 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-
+import { environment } from '../../environments/environment';
 @Injectable({
   providedIn: 'root'
 })
 export class ProjectUpdatesService {
 
-  private baseUrl = 'http://localhost:3000/project-updates';
+  private baseUrl = `${environment.apiUrl}/project-updates`;
 
   constructor(private http: HttpClient) {}
 
@@ -19,6 +19,6 @@ export class ProjectUpdatesService {
   // src/app/services/project-updates.service.ts
 
 deleteUpdate(id: number) {
-  return this.http.delete(`http://localhost:3000/project-updates/${id}`);
+  return this.http.delete(`${this.baseUrl}/${id}`);
 }
 }

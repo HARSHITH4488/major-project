@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ContractorService } from '../contractor/contractor.service';
 import { HttpClient } from '@angular/common/http';
+import { environment } from '../../../environments/environment';
 
 @Component({
   selector: 'app-contractor-updates',
@@ -268,6 +269,7 @@ select, textarea, input {
 `]
 })
 export class ContractorUpdatesComponent implements OnInit {
+  api = environment.apiUrl;
 
   constructor(
     private contractorService: ContractorService,
@@ -343,7 +345,7 @@ export class ContractorUpdatesComponent implements OnInit {
     formData.append('uploadedByName', this.contractorName);
     formData.append('uploadedByRole', 'CONTRACTOR');
 
-    this.http.post(`http://localhost:3000/document/${this.docProjectId}`, formData)
+   this.http.post(`${this.api}/document/${this.docProjectId}`, formData)
       .subscribe(() => {
         alert('Document uploaded successfully');
         this.mode = 'view';
@@ -353,25 +355,25 @@ export class ContractorUpdatesComponent implements OnInit {
 
   loadDocuments() {
     this.http.get(
-      `http://localhost:3000/document/contractor/${this.contractorId}/project/${this.docProjectId}`
-    ).subscribe((res: any) => {
+  `${this.api}/document/contractor/${this.contractorId}/project/${this.docProjectId}`
+).subscribe((res: any) => {
       this.documents = res.data || res;
     });
   }
 
   view(doc: any) {
-    const url = `http://localhost:3000/document/download/${doc.id}`;
+    const url = `${this.api}/document/download/${doc.id}`;
     window.open(url, '_blank');
   }
 
   download(id: number) {
-    window.open(`http://localhost:3000/document/download/${id}`, '_blank');
+   window.open(`${this.api}/document/download/${id}`, '_blank');
   }
 
   delete(doc: any) {
     if (!confirm('Delete this document?')) return;
 
-    this.http.delete(`http://localhost:3000/document/${doc.id}`)
+   this.http.delete(`${this.api}/document/${doc.id}`)
       .subscribe(() => {
         this.documents = this.documents.filter(d => d.id !== doc.id);
         alert('Deleted successfully');

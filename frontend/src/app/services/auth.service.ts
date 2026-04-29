@@ -96,6 +96,6 @@ isManager(): boolean {
   return this.getUserRole() === 'MANAGER'; // optional (future safe)
 }
 activateUser(id: number) {
-  return this.http.patch(`http://localhost:3000/users/${id}/activate`, {});
+  return this.http.patch(`${this.apiUrl}/users/${id}/activate`, {});
 }
 }
