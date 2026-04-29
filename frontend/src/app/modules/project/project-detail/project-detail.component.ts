@@ -480,13 +480,13 @@ loadAssignedContractors() {
   this.projectService.getProjectContractors(this.projectId).subscribe({
     next: (res: any) => {
 
-      const data = res?.data || [];
+      const data = res?.data?.data || [];
 
       this.assignedContractors = data
         .filter((item: any) => item?.contractor)
         .map((item: any) => item.contractor);
 
-      console.log('FIXED:', this.assignedContractors);
+      console.log('FINAL FIX:', this.assignedContractors);
 
     },
     error: (err: any) => console.error(err)
