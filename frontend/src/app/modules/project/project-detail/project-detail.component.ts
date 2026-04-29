@@ -480,10 +480,12 @@ loadAssignedContractors() {
   this.projectService.getProjectContractors(this.projectId).subscribe({
     next: (res: any) => {
 
-      const data = res?.data || res || [];
+      const data = res?.data || [];
 
-      // ✅ FLATTEN DATA (THIS IS THE FIX)
-      this.assignedContractors = data.map((item: any) => item.contractor || item);
+      // ✅ FIX: remove null contractors BEFORE mapping
+      this.assignedContractors = data
+        .filter((item: any) => item && item.contractor) // 💥 key fix
+        .map((item: any) => item.contractor);
 
       console.log('Assigned Contractors:', this.assignedContractors);
 
