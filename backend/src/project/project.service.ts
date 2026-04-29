@@ -201,7 +201,10 @@ return {
         relations: ['contractor'],
       });
 
-    return assignments.map(a => a.contractor);
+    return {
+  success: true,
+  data: assignments
+};
   }
 
   /* =====================================================
