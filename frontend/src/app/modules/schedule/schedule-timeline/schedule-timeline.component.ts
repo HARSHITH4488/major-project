@@ -7,6 +7,7 @@ import Swal from 'sweetalert2';
 import { ProjectService } from '../../../services/project.service';
 import { Router } from '@angular/router';
 
+
 @Component({
   selector: 'app-schedule-timeline',
   standalone: true,
@@ -14,7 +15,10 @@ import { Router } from '@angular/router';
   templateUrl: './schedule-timeline.component.html',
   styleUrls: ['./schedule-timeline.component.scss']
 })
+
 export class ScheduleTimelineComponent implements OnInit {
+  projectEndDate!: Date;
+totalDays!: number;
 
   projectId!: number;
 
@@ -76,10 +80,19 @@ export class ScheduleTimelineComponent implements OnInit {
         this.schedules = res?.data || res || [];
 
         if (this.schedules.length > 0) {
-          const dates = this.schedules.map(s => new Date(s.startDate).getTime());
-          const minDate = Math.min(...dates);
-          this.projectStartDate = new Date(minDate);
-        }
+
+  const startDates = this.schedules.map(s => new Date(s.startDate).getTime());
+  const endDates = this.schedules.map(s => new Date(s.endDate).getTime());
+
+  const minDate = Math.min(...startDates);
+  const maxDate = Math.max(...endDates);
+
+  this.projectStartDate = new Date(minDate);
+  this.projectEndDate = new Date(maxDate);
+
+  this.totalDays =
+    (maxDate - minDate) / (1000 * 60 * 60 * 24) + 1;
+}
       });
   }
 
@@ -95,18 +108,24 @@ export class ScheduleTimelineComponent implements OnInit {
   =================================*/
 
   getScheduleDuration(schedule: any): number {
-    const start = new Date(schedule.startDate).getTime();
-    const end = new Date(schedule.endDate).getTime();
-    const days = (end - start) / (1000 * 60 * 60 * 24) + 1;
-    return days * 40;
-  }
+  const start = new Date(schedule.startDate).getTime();
+  const end = new Date(schedule.endDate).getTime();
+
+  const days =
+    (end - start) / (1000 * 60 * 60 * 24) + 1;
+
+  return (days / this.totalDays) * 100; // ✅ %
+}
 
   getScheduleOffset(schedule: any): number {
-    const start = new Date(schedule.startDate).getTime();
-    const projectStart = new Date(this.projectStartDate).getTime();
-    const days = (start - projectStart) / (1000 * 60 * 60 * 24);
-    return days * 40;
-  }
+  const start = new Date(schedule.startDate).getTime();
+  const projectStart = new Date(this.projectStartDate).getTime();
+
+  const days =
+    (start - projectStart) / (1000 * 60 * 60 * 24);
+
+  return (days / this.totalDays) * 100; // ✅ %
+}
 
   /* ===============================
      OPEN WORK

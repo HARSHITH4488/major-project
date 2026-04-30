@@ -16,8 +16,8 @@
 
         <div
           class="timeline-bar"
-          [style.width.px]="getScheduleDuration(s)"
-          [style.left.px]="getScheduleOffset(s)">
+          [style.width.%]="getScheduleDuration(s)"
+[style.left.%]="getScheduleOffset(s)"
 
           {{ s.startDate | date:'MMM d' }} → {{ s.endDate | date:'MMM d' }}
 
