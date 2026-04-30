@@ -17,7 +17,7 @@
         <div
           class="timeline-bar"
           [style.width.%]="getScheduleDuration(s)"
-[style.left.%]="getScheduleOffset(s)"
+          [style.left.%]="getScheduleOffset(s)">
 
           {{ s.startDate | date:'MMM d' }} → {{ s.endDate | date:'MMM d' }}
 
@@ -27,9 +27,9 @@
 
       <!-- ACTION BUTTONS -->
       <div class="timeline-actions">
-        <button class="btn-edit" (click)="editSchedule(s); $event.stopPropagation()">Edit</button>
-        <button class="btn-delete" (click)="deleteSchedule(s.id); $event.stopPropagation()">Delete</button>
-        <button class="btn-primary" (click)="goToTasks(s.id); $event.stopPropagation()">Manage</button>
+        <button class="btn-edit" (click)="editSchedule(s)">Edit</button>
+        <button class="btn-delete" (click)="deleteSchedule(s.id)">Delete</button>
+        <button class="btn-primary" (click)="goToTasks(s.id)">Manage</button>
       </div>
 
     </div>
