@@ -377,3 +377,46 @@ button{
 .btn-secondary:hover {
   background: #e5e7eb;
 }
+.timeline-row{
+  display:flex;
+  align-items:center;
+  gap:18px;
+  min-width:0; /* 🔥 important fix */
+}
+.timeline-bar-wrapper{
+  position:relative;
+  flex:1;
+  min-width:0; /* 🔥 prevents overflow pushing */
+  background:#f1f5f9;
+  border-radius:10px;
+  height:38px;
+  display:flex;
+  align-items:center;
+  overflow:hidden;
+}
+.timeline-actions{
+  margin-left:12px;
+  display:flex;
+  gap:8px;
+  flex-shrink:0; /* 🔥 keeps buttons visible */
+}
+.timeline-bar{
+  position:absolute; /* 🔥 key change */
+  height:30px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  padding:0 14px;
+  border-radius:8px;
+  font-size:12px;
+  font-weight:500;
+  color:white;
+  background:linear-gradient(135deg,#3b82f6,#2563eb);
+  transition:all .2s ease;
+  cursor:pointer;
+  z-index:2;
+  white-space:nowrap; /* prevents text wrap */
+}
+.timeline{
+  overflow-x:auto;
+}
