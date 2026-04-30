@@ -54,20 +54,20 @@ loadContractors() {
   this.projectService.getProjectContractors(this.projectId)
     .subscribe((res: any) => {
 
-      console.log('Contractor API:', res); // 👈 keep this
+      console.log('Contractor API:', res);
 
-      // ✅ GUARANTEE ARRAY
-      if (Array.isArray(res)) {
-        this.contractors = res;
-      } else if (Array.isArray(res?.data)) {
-        this.contractors = res.data;
-      } else if (Array.isArray(res?.data?.contractors)) {
-        this.contractors = res.data.contractors;
+      // ✅ CORRECT PATH
+      const contractorArray = res?.data?.data;
+
+      if (Array.isArray(contractorArray)) {
+        this.contractors = contractorArray.map((c: any) => ({
+          id: c.id,
+          name: c.name
+        }));
       } else {
         this.contractors = [];
       }
 
-      // ✅ IMPORTANT: load schedules AFTER contractors
       this.loadSchedules();
     });
 }
