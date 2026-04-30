@@ -11,43 +11,25 @@
         {{ s.workName }}
       </div>
 
+      <!-- TIMELINE AREA -->
       <div class="timeline-bar-wrapper">
 
-        <!-- BAR -->
         <div
           class="timeline-bar"
           [style.width.px]="getScheduleDuration(s)"
-          [style.marginLeft.px]="getScheduleOffset(s)">
+          [style.left.px]="getScheduleOffset(s)"
 
           {{ s.startDate | date:'MMM d' }} → {{ s.endDate | date:'MMM d' }}
 
         </div>
-        
-        
 
-        <!-- ACTION BUTTONS -->
-        <div class="timeline-actions">
+      </div>
 
-          <button
-            class="btn-edit"
-            (click)="editSchedule(s); $event.stopPropagation()">
-            Edit
-          </button>
-
-          <button
-            class="btn-delete"
-            (click)="deleteSchedule(s.id); $event.stopPropagation()">
-            Delete
-          </button>
-
-          <button
-            class="btn-primary"
-            (click)="goToTasks(s.id); $event.stopPropagation()">
-            Manage
-          </button>
-
-        </div>
-
+      <!-- ACTION BUTTONS -->
+      <div class="timeline-actions">
+        <button class="btn-edit" (click)="editSchedule(s); $event.stopPropagation()">Edit</button>
+        <button class="btn-delete" (click)="deleteSchedule(s.id); $event.stopPropagation()">Delete</button>
+        <button class="btn-primary" (click)="goToTasks(s.id); $event.stopPropagation()">Manage</button>
       </div>
 
     </div>
