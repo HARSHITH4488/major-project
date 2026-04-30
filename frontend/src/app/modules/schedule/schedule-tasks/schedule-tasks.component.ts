@@ -42,23 +42,33 @@ private projectService:ProjectService
 ){}
 
 ngOnInit() {
-
   this.projectId = Number(this.route.snapshot.paramMap.get('projectId'));
 
-  this.loadContractors(); // ✅ NEW
-
   this.route.queryParams.subscribe(params => {
-
     this.scheduleId = Number(params['scheduleId']);
-    this.loadSchedules();
-
   });
 
+  this.loadContractors(); // 👈 this will now call schedules internally
 }
 loadContractors() {
   this.projectService.getProjectContractors(this.projectId)
     .subscribe((res: any) => {
-      this.contractors = res?.data || res || [];
+
+      console.log('Contractor API:', res); // 👈 keep this
+
+      // ✅ GUARANTEE ARRAY
+      if (Array.isArray(res)) {
+        this.contractors = res;
+      } else if (Array.isArray(res?.data)) {
+        this.contractors = res.data;
+      } else if (Array.isArray(res?.data?.contractors)) {
+        this.contractors = res.data.contractors;
+      } else {
+        this.contractors = [];
+      }
+
+      // ✅ IMPORTANT: load schedules AFTER contractors
+      this.loadSchedules();
     });
 }
 
@@ -110,9 +120,9 @@ tasks = tasks.sort((a: any, b: any) => {
 
 this.scheduleTasks = tasks.map((task: any) => ({
   ...task,
-  contractorName: this.contractors.find(
-    c => c.id === task.contractorId
-  )?.name || '—'
+  contractorName: Array.isArray(this.contractors)
+  ? this.contractors.find(c => c.id === task.contractorId)?.name || '—'
+  : '—'
 }));
 
     });
