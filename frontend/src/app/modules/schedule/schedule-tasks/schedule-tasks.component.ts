@@ -158,9 +158,9 @@ addTask(){
 
       this.selectedSchedule = freshSchedule;
 
-      const assignment = this.selectedSchedule.assignments?.find(
-        (a: any) => a.contractor.id === this.selectedContractorId
-      );
+     const assignment = this.selectedSchedule.assignments?.find(
+  (a: any) => a.contractor?.id === this.selectedContractorId
+);
 
       if (!assignment) {
 
