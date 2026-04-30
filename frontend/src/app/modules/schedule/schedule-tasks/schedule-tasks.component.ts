@@ -61,9 +61,9 @@ loadContractors() {
 
       if (Array.isArray(contractorArray)) {
         this.contractors = contractorArray.map((c: any) => ({
-          id: c.id,
-          name: c.name
-        }));
+  id: c.contractor?.id,
+  name: c.contractor?.name
+}));
       } else {
         this.contractors = [];
       }
