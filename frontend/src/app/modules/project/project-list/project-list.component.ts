@@ -49,6 +49,10 @@ export class ProjectListComponent implements OnInit {
 
       // ✅ Correct mapping based on your real response
       this.projects = res?.data?.data || [];
+      // ✅ SORT by startDate (latest first)
+this.projects.sort((a: any, b: any) => {
+  return new Date(b.startDate).getTime() - new Date(a.startDate).getTime();
+});
       this.projects.forEach(project => {
   this.calculateProjectProgress(project.id, project);
 });
