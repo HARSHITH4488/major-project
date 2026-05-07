@@ -448,15 +448,34 @@ button{
 }
 
 .project-title {
-  font-size: 32px;
-  font-weight: 700;
+  font-size: 42px;
+  font-weight: 800;
   margin: 0;
-  color: #1e293b;
-}
+  letter-spacing: -1px;
 
+  background: linear-gradient(
+    135deg,
+    #0f172a,
+    #1e3a8a,
+    #2563eb
+  );
+
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+
+  position: relative;
+  display: inline-block;
+}
 .timeline-header h3 {
-  margin-top: 6px;
+  margin-top: 8px;
   color: #64748b;
-  font-size: 18px;
+  font-size: 16px;
   font-weight: 500;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+}
+.timeline-header {
+  padding-bottom: 20px;
+  border-bottom: 1px solid #e2e8f0;
+  margin-bottom: 34px;
 }
