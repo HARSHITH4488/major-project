@@ -21,6 +21,7 @@ export class ScheduleTimelineComponent implements OnInit {
 totalDays!: number;
 
   projectId!: number;
+  project: any;
 
   schedules: any[] = [];
 
@@ -68,6 +69,7 @@ totalDays!: number;
     this.loadSchedules();
     this.loadContractors();
     this.generateTimelineDays();
+     this.loadProject();
   }
 
   /* ===============================
@@ -95,6 +97,14 @@ totalDays!: number;
 }
       });
   }
+  loadProject() {
+  this.projectService.getById(this.projectId)
+    .subscribe((res: any) => {
+
+      this.project = res?.data || res;
+
+    });
+}
 
   loadContractors() {
     this.projectService.getProjectContractors(this.projectId)
