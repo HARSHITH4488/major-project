@@ -443,3 +443,20 @@ button{
   gap: 8px;
   justify-content: flex-end;
 }
+.timeline-header {
+  margin-bottom: 30px;
+}
+
+.project-title {
+  font-size: 32px;
+  font-weight: 700;
+  margin: 0;
+  color: #1e293b;
+}
+
+.timeline-header h3 {
+  margin-top: 6px;
+  color: #64748b;
+  font-size: 18px;
+  font-weight: 500;
+}
