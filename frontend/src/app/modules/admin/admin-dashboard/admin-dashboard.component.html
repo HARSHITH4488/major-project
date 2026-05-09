@@ -91,17 +91,25 @@
 
     <!-- Line Chart -->
     <div class="card">
-      <h3 class="card-title">Tasks Trend</h3>
 
-      <canvas
-        baseChart
-        [data]="taskTrendData"
-        [options]="taskTrendOptions"
-        [type]="'line'">
-      </canvas>
-    </div>
+  <!-- HEADER -->
+  <div class="card-header">
+    <h3 class="card-title">Tasks Trend</h3>
 
+    <span class="daily-task-label">
+      Daily Tasks
+    </span>
   </div>
+
+  <!-- CHART -->
+  <canvas
+    baseChart
+    [data]="taskTrendData"
+    [options]="taskTrendOptions"
+    [type]="'line'">
+  </canvas>
+
+</div>
 
   <!-- BOTTOM GRID -->
   <div class="bottom-grid">
