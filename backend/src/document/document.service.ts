@@ -24,10 +24,13 @@ export class DocumentService {
   return new Promise((resolve, reject) => {
     cloudinary.uploader
       .upload_stream(
-        {
-          folder: 'site-manager',
-          resource_type: 'auto',
-        },
+  {
+    folder: 'site-manager',
+    resource_type: 'auto',
+    use_filename: true,
+    unique_filename: false,
+    overwrite: true,
+  },
         (error, result) => {
           if (error) return reject(error);
           resolve(result);
