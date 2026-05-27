@@ -92,7 +92,9 @@ export class DocumentController {
     const { filePath, fileName } =
       await this.documentService.downloadDocument(id);
 
-    return res.redirect(filePath);
+    return res.redirect(
+  `${filePath}?fl_attachment=${encodeURIComponent(fileName)}`,
+);
   }
 
   // ================= DELETE =================
