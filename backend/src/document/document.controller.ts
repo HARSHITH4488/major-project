@@ -93,7 +93,7 @@ export class DocumentController {
       await this.documentService.downloadDocument(id);
 
     return res.redirect(
-  `${filePath}?fl_attachment=${encodeURIComponent(fileName)}`,
+  `${filePath}?attname=${encodeURIComponent(fileName)}`,
 );
   }
 
