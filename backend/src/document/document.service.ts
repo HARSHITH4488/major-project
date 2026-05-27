@@ -26,7 +26,9 @@ export class DocumentService {
       .upload_stream(
   {
     folder: 'site-manager',
-    resource_type: 'auto',
+    resource_type: 'raw',
+    public_id: path.parse(file.originalname).name,
+    format: path.extname(file.originalname).replace('.', ''),
     use_filename: true,
     unique_filename: false,
     overwrite: true,
