@@ -92,7 +92,7 @@ export class DocumentController {
     const { filePath, fileName } =
       await this.documentService.downloadDocument(id);
 
-    return res.download(filePath, fileName);
+    return res.redirect(filePath);
   }
 
   // ================= DELETE =================

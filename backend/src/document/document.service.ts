@@ -90,25 +90,19 @@ export class DocumentService {
 
   // ================= DOWNLOAD =================
   async downloadDocument(documentId: number) {
-    const document = await this.documentRepository.findOne({
-      where: { id: documentId },
-    });
+  const document = await this.documentRepository.findOne({
+    where: { id: documentId },
+  });
 
-    if (!document) {
-      throw new NotFoundException('Document not found');
-    }
-
-    const filePath = path.resolve(document.filePath);
-
-    if (!fs.existsSync(filePath)) {
-      throw new NotFoundException('File not found on server');
-    }
-
-    return {
-      filePath,
-      fileName: document.fileName,
-    };
+  if (!document) {
+    throw new NotFoundException('Document not found');
   }
+
+  return {
+    filePath: document.filePath,
+    fileName: document.fileName,
+  };
+}
 
   // ================= DELETE =================
   async deleteDocument(documentId: number) {
