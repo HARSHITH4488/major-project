@@ -15,7 +15,7 @@ import {
 } from '@nestjs/common';
 import { Response } from 'express';
 import { FileInterceptor } from '@nestjs/platform-express';
-import { diskStorage } from 'multer';
+import { memoryStorage } from 'multer';
 import { DocumentService } from './document.service';
 import { UploadDocumentDto } from './dto/upload-document.dto';
 import { PaginationDto } from '../common/dto/pagination.dto';
@@ -34,23 +34,7 @@ export class DocumentController {
   @Post(':projectId')
   @UseInterceptors(
     FileInterceptor('file', {
-      storage: diskStorage({
-        destination: (req, file, cb) => {
-          const projectId = req.params.projectId;
-          const uploadPath = `./uploads/project-${projectId}`;
-          const fs = require('fs');
-
-          if (!fs.existsSync(uploadPath)) {
-            fs.mkdirSync(uploadPath, { recursive: true });
-          }
-
-          cb(null, uploadPath);
-        },
-        filename: (req, file, cb) => {
-          const uniqueName = Date.now() + '-' + file.originalname;
-          cb(null, uniqueName);
-        },
-      }),
+    storage: memoryStorage(),
 
       limits: {
         fileSize: 5 * 1024 * 1024, // 5MB

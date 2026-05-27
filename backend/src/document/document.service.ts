@@ -7,7 +7,7 @@ import { DocumentContractor } from './document-contractor.entity';
 import * as fs from 'fs';
 import * as path from 'path';
 import { PaginationDto } from '../common/dto/pagination.dto';
-
+import cloudinary from '../common/cloudinary/cloudinary.config';
 @Injectable()
 export class DocumentService {
   constructor(
@@ -20,6 +20,22 @@ export class DocumentService {
     @InjectRepository(DocumentContractor)
     private readonly documentContractorRepo: Repository<DocumentContractor>,
   ) {}
+  async uploadToCloudinary(file: Express.Multer.File) {
+  return new Promise((resolve, reject) => {
+    cloudinary.uploader
+      .upload_stream(
+        {
+          folder: 'site-manager',
+          resource_type: 'auto',
+        },
+        (error, result) => {
+          if (error) return reject(error);
+          resolve(result);
+        },
+      )
+      .end(file.buffer);
+  });
+}
 
   // ================= UPLOAD =================
   async upload(
@@ -40,11 +56,12 @@ export class DocumentService {
     if (!project) {
       throw new NotFoundException('Project not found');
     }
+    const uploadedFile: any = await this.uploadToCloudinary(file);
 
     const document = this.documentRepository.create({
       fileName: file.originalname,
       fileType: file.mimetype,
-      filePath: file.path,
+      filePath: uploadedFile.secure_url,
       fileSize: file.size,
       category,
       uploadedByName,
