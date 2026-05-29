@@ -245,25 +245,7 @@ private readonly assignmentRepo: Repository<ScheduleAssignment>,
   const start = new Date(startDate).toISOString().split('T')[0];
 const end = new Date(endDate).toISOString().split('T')[0];
 
-const conflict = await this.taskRepo
-  .createQueryBuilder('task')
-  .where('task.contractorId = :contractorId', { contractorId }) // ✅ FIX
-  .andWhere(
-    `task."startDate" <= :end AND task."endDate" >= :start`,
-    {
-      start,
-      end,
-    },
-  )
-  .getOne();
 
-console.log('Conflict:', conflict);
-
-if (conflict) {
-  throw new BadRequestException(
-    'Contractor already assigned for these dates',
-  );
-}
 
   if (taskStart < scheduleStart || taskEnd > scheduleEnd) {
     throw new BadRequestException(
