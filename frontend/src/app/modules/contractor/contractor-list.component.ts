@@ -24,11 +24,27 @@ export class ContractorListComponent implements OnInit{
   selectedWorkType: string = '';
 
   workTypes: string[] = [
-    'Electrician',
-    'Plumber',
-    'Carpenter',
-    'Painter',
-    'Civil Contractor'
+  'ARTIST',
+  'BLINDS',
+  'CARPENTER',
+  'CIVIL CONTRACTOR',
+  'COPPER PIPING',
+  'CURTAINS',
+  'ELECTRICIAN',
+  'FABRICATION',
+  'FALSE CEILING',
+  'GARDENER',
+  'GLASS WORKS',
+  'HARDWARE SUPPLY',
+  'LAMINATE SUPPLY',
+  'PAINTER',
+  'PLUMBER',
+  'POLISH',
+  'TILE LAYING',
+  'TILES SUPPLIERS',
+  'UPHOLSTRY',
+  'UPVC',
+  'WALLPAPER'
   ];
 
   constructor(
